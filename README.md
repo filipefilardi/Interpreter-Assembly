@@ -11,3 +11,16 @@ MOV de registrador para registrador MOV de endereço de memória (fixo ou guarda
 - se o ciclo de instrução está no ciclo de busca, indireção ou execucção (não é preciso implementar nada relacionado a interrupções nesse EP).
 
 Os sinais de controle devem ser indicados em um esquema do processador (o ideal seria que esse esquema aparecesse na interface do EP, mas não é necessário implementar uma interface gráfica - se optarem por uma interface de texto devem entregar esse esquema em um relatório junto com o EP). Definir a arquitetura, os opcodes, os códigos de operação para a ULA, os sinais de controle para a memória e o que cada bit das linhas do microprograma horizontal significa faz parte do EP e também deve ser indicado em relatório ou na interface do programa.
+
+### Outros Requisitos:
+
+- Funcionar com hexa e com registradores (A, B, C, D)
+- Não é para implementar labels. Usaremos o número da linha para os jumps. E começa na linha 0.
+- Não tera marcadores de fim programas.
+- Usar barramentos não dedicados. 
+- Implementar as seguintes mensagens de erro:
+  1. Comando ou atributo Vazio
+  2. Type Erros
+  3. Divisão por zero.
+- MOV | DIV -> Funcionar com um único parâmetro.
+- Comandos sempre em maiúsculo.
