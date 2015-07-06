@@ -36,7 +36,7 @@ public class CmdAssembly {
 			case "MOV":
 				break;
 			default:
-				throw new IllegalArgumentException("Invalid day of the week: " + comando);
+				throw new IllegalArgumentException("Invalid command: " + comando);
 		}
 	
 	}	
