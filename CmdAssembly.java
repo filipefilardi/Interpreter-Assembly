@@ -110,8 +110,13 @@ public class CmdAssembly {
 		
 		switch(command){
 			case "ADD":
-				X1Dec += X2Dec;
-				System.out.println(toHex(X1Dec));
+				if(memoryX1 == true || memoryX2 == true){
+					//Tem que ser tradado como memoria
+				}
+				else {
+					X1Dec += X2Dec; // faz a operacao normal
+					System.out.println(toHex(X1Dec));
+				}
 //				updateMemoria(table, toHex(X1Dec));
 				break;
 			case "SUB":
