@@ -4,7 +4,7 @@ public class CmdAssembly {
 	public static void main(String[] args){
 
 		//[Entrada]: não sei como sera o input
-		String cmd = "ADD 10, 20";
+		String cmd = "ADD 1F, 20";
 		
 		//Declaracao das strings
 		String command ="";
@@ -38,31 +38,41 @@ public class CmdAssembly {
 		if(command.equalsIgnoreCase("") || ax.equalsIgnoreCase("") || bx.equalsIgnoreCase("")) throw new IllegalArgumentException("Parametros nao podem ser nulos");
 		
 		//Transformando as Strings em inteiros
-		int AX = Integer.parseInt(ax); //TODO pode ser int?
-		int BX = Integer.parseInt(bx);
+		//int AX = Integer.parseInt(ax); 
+		//int BX = Integer.parseInt(bx);
+		
+		//Transformando em decimal
+		Integer AXDec = toDec(ax);
+		Integer BXDec = toDec(bx);
 		
 		switch(command){
 			case "ADD":
-				AX += BX;
+				AXDec += BXDec;
+				System.out.println(toHex(AXDec));
 				break;
 			case "SUB":
-				AX -= BX;
+				AXDec -= BXDec;
+				System.out.println(toHex(AXDec));
 				break;
 			case "MUL":
-				AX *= BX;
+				AXDec *= BXDec;
+				System.out.println(toHex(AXDec));
 				break;
 			case "DIV":
-				if (BX == 0) throw new IllegalArgumentException("Nao pode divir por zero");
-				else AX /= BX;
+				if (BXDec == 0) throw new IllegalArgumentException("Nao pode divir por zero");
+				else AXDec /= BXDec;
+				System.out.println(toHex(AXDec));
 				break;
 			case "INC":
-				AX++;
+				AXDec++;
+				System.out.println(toHex(AXDec));
 				break;
 			case "DEC":
-				AX--;
+				AXDec--;
+				System.out.println(toHex(AXDec));
 				break;
 			case "CMP":
-				int result = AX - BX;
+				int result = AXDec - BXDec;
 				
 				//Determinacao das flags
 				if(result == 0) flagZero = 1;
@@ -72,14 +82,14 @@ public class CmdAssembly {
 				if(result > 0) flagSinal = 0; // TODO Se for igual a zero, flagSinal = ?
 				break;
 			case "JMP":
-				jump(AX, BX);
+				jump(AXDec, BXDec);
 				break;
 			case "JZ":
 				if(flagZero == null) throw new IllegalArgumentException("CMP NAO FOI EXECUTADO"); //TODO Eh necessario? se sim, adicionar nos outros jumps
-				if(flagZero == 1) jump(AX, BX);
+				if(flagZero == 1) jump(AXDec, BXDec);
 				break;
 			case "JNZ":
-				if(flagZero == 0) jump(AX, BX);
+				if(flagZero == 0) jump(AXDec, BXDec);
 				break;
 			case "JL":
 				//TODO if(flagSinal == 1) jump(AX, BX); CONFIRMAR
@@ -94,12 +104,22 @@ public class CmdAssembly {
 				//TODO if((flagSinal == 0) || (flagSinal == 0 && flagZero == 1)) jump(AX, BX); CONFIRMAR
 				break;
 			case "MOV":
-				AX = BX;
+				AXDec = BXDec;
 				break;
 			default:
 				throw new IllegalArgumentException("Comando Invalido: " + command + " [>] tente CMD ax, bx");
 		}
 	
+	}
+	
+	//String to Integer Decimal
+	public static Integer toDec(String hex){
+		return Integer.parseInt(hex, 16);
+	}
+	
+	//Integer to String Hexadecimal
+	public static String toHex(Integer dec){
+		return Integer.toHexString(dec);
 	}
 	
 	public static void jump (int AX, int BX){
