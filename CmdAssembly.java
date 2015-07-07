@@ -70,6 +70,10 @@ public class CmdAssembly {
 		Integer flagSinal = null; // 0 = positivo   &    1 = negativo
 		Integer flagZero = null; //  0 != 0        &    1 = 0
 
+		//Verifica se foi passado memoria como parametro no comando
+		Boolean memoryX1 = false;
+		Boolean memoryX2 = false;
+
 		//Separacao do cmd em cmmand, x1 e x2
 		int counter = 0;
 		String comando = comandos[i].toUpperCase(); //Uppercase para funcionar tanto Add quanto ADD
@@ -79,9 +83,11 @@ public class CmdAssembly {
 				command += c;
 			}
 			if(counter == 1 && c!=' ' && c!= ','){
+				if(c == '[' || c ==']') memoryX1 = true;
 				x1 += c;
 			}
 			if(counter == 2 && c!=' '){
+				if(c == '[' || c ==']') memoryX2 = true;
 				x2 += c;
 			}
 		}
