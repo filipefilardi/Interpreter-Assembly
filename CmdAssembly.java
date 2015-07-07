@@ -41,6 +41,10 @@ public class CmdAssembly {
 		table.setValueAt(valor, getRowByValue(table, endereco), 1);
 	}
 	
+	public int getMemoria(JTable table, String endereco){
+	    return Integer.parseInt(table.getValueAt(getRowByValue(table, endereco), 1).toString() );
+	}
+	
 	public void updateBus(JLabel openBars, Integer[] portas){
 		String abertas = "";
 		for(int i=0;i<=portas.length-1;i++){
@@ -59,67 +63,74 @@ public class CmdAssembly {
 		
 		//Declaracao das strings
 		String command ="";
-		String ax = "";
-		String bx = "";
+		String x1 = "";
+		String x2 = "";
 		
 		//Declaracao das flags [sinal e zero]
 		Integer flagSinal = null; // 0 = positivo   &    1 = negativo
 		Integer flagZero = null; //  0 != 0        &    1 = 0
 
-		//Separacao  do cmd em cmmand, ax e bx
+		//Separacao do cmd em cmmand, x1 e x2
 		int counter = 0;
-		for(char c : comandos[i].toCharArray()){
+		String comando = comandos[i].toUpperCase(); //Uppercase para funcionar tanto Add quanto ADD
+		for(char c : comando.toCharArray()){
 			if (c == ' ') counter++;
 			if (counter == 0){
 				command += c;
 			}
 			if(counter == 1 && c!=' ' && c!= ','){
-				ax += c;
+				x1 += c;
 			}
 			if(counter == 2 && c!=' '){
-				bx += c;
+				x2 += c;
 			}
 		}
 		
 		//TODO apagar os prints
 		System.out.println("[DEBUG] Cmd:" + command);
-		System.out.println("[DEBUG] AX:" + ax);
-		System.out.println("[DEBUG] BX:" + bx);
+		System.out.println("[DEBUG] AX:" + x1);
+		System.out.println("[DEBUG] BX:" + x2);
 		
-		if(command.equalsIgnoreCase("") || ax.equalsIgnoreCase("") || bx.equalsIgnoreCase("")) throw new IllegalArgumentException("Parametros nao podem ser nulos");
+		if(command.equalsIgnoreCase("") || x1.equalsIgnoreCase("") || x2.equalsIgnoreCase("")) throw new IllegalArgumentException("Parametros nao podem ser nulos");
+
+		//Verificar se x1 ou x2 são endereços de memória.
+		
 		
 		//Transformando em decimal
-		Integer AXDec = toDec(ax);
-		Integer BXDec = toDec(bx);
+		Integer X1Dec = toDec(x1);
+		Integer X2Dec = toDec(x2);
+		
+
 		
 		switch(command){
 			case "ADD":
-				AXDec += BXDec;
-				System.out.println(toHex(AXDec));
+				X1Dec += X2Dec;
+				System.out.println(toHex(X1Dec));
+//				updateMemoria(table, toHex(X1Dec));
 				break;
 			case "SUB":
-				AXDec -= BXDec;
-				System.out.println(toHex(AXDec));
+				X1Dec -= X2Dec;
+				System.out.println(toHex(X1Dec));
 				break;
 			case "MUL":
-				AXDec *= BXDec;
-				System.out.println(toHex(AXDec));
+				X1Dec *= X2Dec;
+				System.out.println(toHex(X1Dec));
 				break;
 			case "DIV":
-				if (BXDec == 0) throw new IllegalArgumentException("Nao pode divir por zero");
-				else AXDec /= BXDec;
-				System.out.println(toHex(AXDec));
+				if (X2Dec == 0) throw new IllegalArgumentException("Nao pode divir por zero");
+				else X1Dec /= X2Dec;
+				System.out.println(toHex(X1Dec));
 				break;
 			case "INC":
-				AXDec++;
-				System.out.println(toHex(AXDec));
+				X1Dec++;
+				System.out.println(toHex(X1Dec));
 				break;
 			case "DEC":
-				AXDec--;
-				System.out.println(toHex(AXDec));
+				X1Dec--;
+				System.out.println(toHex(X1Dec));
 				break;
 			case "CMP":
-				int result = AXDec - BXDec;
+				int result = X1Dec - X2Dec;
 				
 				//Determinacao das flags
 				if(result == 0) flagZero = 1;
@@ -129,14 +140,14 @@ public class CmdAssembly {
 				if(result > 0) flagSinal = 0; // TODO Se for igual a zero, flagSinal = ?
 				break;
 			case "JMP":
-				jump(AXDec, BXDec);
+				jump(X1Dec, X2Dec);
 				break;
 			case "JZ":
 				if(flagZero == null) throw new IllegalArgumentException("CMP NAO FOI EXECUTADO"); //TODO Eh necessario? se sim, adicionar nos outros jumps
-				if(flagZero == 1) jump(AXDec, BXDec);
+				if(flagZero == 1) jump(X1Dec, X2Dec);
 				break;
 			case "JNZ":
-				if(flagZero == 0) jump(AXDec, BXDec);
+				if(flagZero == 0) jump(X1Dec, X2Dec);
 				break;
 			case "JL":
 				//TODO if(flagSinal == 1) jump(AX, BX); CONFIRMAR
@@ -151,7 +162,7 @@ public class CmdAssembly {
 				//TODO if((flagSinal == 0) || (flagSinal == 0 && flagZero == 1)) jump(AX, BX); CONFIRMAR
 				break;
 			case "MOV":
-				AXDec = BXDec;
+				X1Dec = X2Dec;
 				break;
 			default:
 				throw new IllegalArgumentException("Comando Invalido: " + command + " [>] tente CMD ax, bx");
