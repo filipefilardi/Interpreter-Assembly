@@ -1,7 +1,9 @@
+package src;
+
 /*
 EP2-OCD
 Filipe Filardi de Jesus, 8516761
-Gabriel Salgado Sina
+Gabriel Salgado Sina, 8061448
 Rodrigo Guerra, 8516497
 */
 
@@ -32,7 +34,7 @@ public class CmdAssembly {
  
 	
 	public void updateMemoria(JTable table, String valor, String endereco){
-		//Procura qual Ã© a linha que estÃ¡ o endereÃ§o -> getRowByValue(table, endereco)
+		//Procura qual ÃƒÂ© a linha que estÃƒÂ¡ o endereÃƒÂ§o -> getRowByValue(table, endereco)
 		//Atualizar a coluna 1 = valor
 		table.setValueAt(valor, getRowByValue(table, endereco), 1);
 	}
@@ -66,7 +68,7 @@ public class CmdAssembly {
 	
 	public void executeLine(Integer i){
 		
-		//Verifica qual o comando e roda o cÃ³digo do comando.
+		//Verifica qual o comando e roda o cÃƒÂ³digo do comando.
 		boolean registrador1 = false;
 		boolean registrador2 = false;
 		
@@ -105,15 +107,19 @@ public class CmdAssembly {
 			}
 		}
 		
-		if (x2.equals("")) x2= "0";
+		if (x2.equals("")){
+			if(command.equals("ADD") || command.equals("SUB") || command.equals("CMP")) throw new IllegalArgumentException("Segundo parametro não pode ser nulo"); //TODO Imprimir na tela do programa
+			else x2= "0";
+		}
+		if(x1.length() > 8 || x2.length() > 8) throw new IllegalArgumentException("O numero tem que ser menor que 32 bits");
+		
 		
 		//Transformando em decimal
-		
 		Integer V1Dec = null;
 		Integer V2Dec = null;
 		
 		
-		//Esse código serve apenas para descobrir se é registrador ou não. 
+		//Esse codigo serve apenas para descobrir se Ã© registrador ou nÃ£o. 
 		//Nos sobrescreveremos os valores de V1Dec e V2Dec mais abaixo.
 		try{
 			V1Dec = toDec(x1);
@@ -129,24 +135,22 @@ public class CmdAssembly {
 		
 		
 	
-		//Calcula variavél v1, v2
-//		-> Valores de x1 e x2 -> Se estiverem na memória ou não.
+		//Calcula variavÃ©l v1, v2
+//		-> Valores de x1 e x2 -> Se estiverem na memÃ³ria ou nÃ£o.
 		
 		if(registrador1){
 			if (x1.equals("AX")){
-				v1 = Integer.parseInt(AX);
+				v1 = toDec(AX);
 			}
 			if (x1.equals("BX")){
-				v1 = Integer.parseInt(BX);
+				v1 = toDec(BX);
 			}
 			if (x1.equals("CX")){
-				v1 = Integer.parseInt(CX);
+				v1 = toDec(CX);
 			}
 			if (x1.equals("DX")){
-				v1 = Integer.parseInt(DX);
-			}
-			
-			
+				v1 = toDec(DX);
+			}		
 		}else if (memoryX1){
 			v1 = getMemoria(tabela,x1);
 			v1 = toDec(Integer.toString(v1));
@@ -156,16 +160,16 @@ public class CmdAssembly {
 		
 		if(registrador2){
 			if (x2.equals("AX")){
-				v2 = Integer.parseInt(AX);
+				v2 = toDec(AX);
 			}
 			if (x2.equals("BX")){
-				v2 = Integer.parseInt(BX);
+				v2 = toDec(BX);
 			}
 			if (x2.equals("CX")){
-				v2 = Integer.parseInt(CX);
+				v2 = toDec(CX);
 			}
 			if (x2.equals("DX")){
-				v2 = Integer.parseInt(DX);
+				v2 = toDec(DX);
 			}
 			
 		}else if (memoryX2){
@@ -236,7 +240,6 @@ public class CmdAssembly {
 				}
 				break;
 			case "MUL":
-				
 				int auxMul = toDec(AX);
 				AX = toHex(auxMul *= v1);	
 				break;
@@ -245,15 +248,13 @@ public class CmdAssembly {
 				else {
 					AX = Integer.toString(toDec(DX));
 					int auxDiv = Integer.parseInt(AX);
-					AX = toHex(auxDiv/=v1);
-					DX = toHex(auxDiv % v1);
+					AX = toHex(auxDiv/v1);
+					DX = toHex(auxDiv%v1);
 				}
-				System.out.println(toHex(v1));
 				break;
 			case "INC":
 				v1++;
-				resultado = Integer.toString(v1);
-						
+				resultado = toHex(v1);
 				if(memoryX1){
 					updateMemoria(tabela, resultado, x1);
 				}else if(registrador1){
@@ -274,8 +275,7 @@ public class CmdAssembly {
 				break;
 			case "DEC":
 				v1--;
-				resultado = Integer.toString(v1);
-						
+				resultado = toHex(v1);
 				if(memoryX1){
 					updateMemoria(tabela, resultado, x1);
 				}else if(registrador1){
@@ -301,7 +301,7 @@ public class CmdAssembly {
 				else flagZero = 0;
 				
 				if(result < 0) flagSinal = 1;
-				if(result > 0) flagSinal = 0; // TODO Se for igual a zero, flagSinal = ?
+				if(result >= 0) flagSinal = 0;
 				break;
 			case "JMP":
 				executeLine(v1);
@@ -310,29 +310,50 @@ public class CmdAssembly {
 				as.atualizaLinha(v1);
 				break;
 			case "JZ":
-				if(flagZero == null) throw new IllegalArgumentException("CMP NAO FOI EXECUTADO"); //TODO Eh necessario? se sim, adicionar nos outros jumps
+				if(flagZero == null) throw new IllegalArgumentException("CMP NAO FOI EXECUTADO");
 				if(flagZero == 1) executeLine(v1);
 				break;
 			case "JNZ":
+				if(flagZero == null) throw new IllegalArgumentException("CMP NAO FOI EXECUTADO");
 				if(flagZero == 0) executeLine(v1);
 				break;
 			case "JL":
+				if(flagSinal == null) throw new IllegalArgumentException("CMP NAO FOI EXECUTADO");
 				if(flagSinal == 1) executeLine(v1); 
 				break;
 			case "JG":
+				if(flagSinal == null) throw new IllegalArgumentException("CMP NAO FOI EXECUTADO");
 				if(flagSinal == 0) executeLine(v1); 
 				break;
 			case "JLE":
+				if(flagSinal == null) throw new IllegalArgumentException("CMP NAO FOI EXECUTADO");
 				if((flagSinal == 1) || (flagSinal == 1 && flagZero == 1)) executeLine(v1);
 				break;
 			case "JGE":
+				if(flagZero == null) throw new IllegalArgumentException("CMP NAO FOI EXECUTADO");
 				if((flagSinal == 0) || (flagSinal == 0 && flagZero == 1)) executeLine(v1);
 				break;
 			case "MOV":
-			V1Dec = V2Dec;
+				resultado = toHex(v2);
+				if(memoryX1){
+					updateMemoria(tabela, resultado, x1);
+				}else if(registrador1){
+					if (x1.equals("AX")){
+						AX = resultado;
+					}
+					if (x1.equals("BX")){
+						BX = resultado;
+					}
+					if (x1.equals("CX")){
+						CX = resultado;
+					}
+					if (x1.equals("DX")){
+						DX = resultado;
+					}
+				}
 				break;
 			default:
-				throw new IllegalArgumentException("Comando Invalido: " + command + " [>] tente CMD ax, bx");
+				throw new IllegalArgumentException("Comando Invalido: " + command + " [>] tente ADD AX, 10");
 		}
 		
 		 updateRegistradores();
@@ -346,15 +367,15 @@ public class CmdAssembly {
 		
 		//Limpar comandos
 		
-		//Cria a lista ligada ou matriz com o cÃ³digo.
+		//Cria a lista ligada ou matriz com o cÃƒÂ³digo.
 		String codigo = txtAssembly.getText();
 		comandos = codigo.split("\\r?\\n");
 		tabela = table;
 		//updateBus(openBars, abre );
 		
-		//Verifica qual o comando e roda o cÃ³digo do comando.
-		//Retorna as portas que ficarÃ£o abertas e 
-		//Muda as memÃ³rias que mudarÃ£o
+		//Verifica qual o comando e roda o cÃƒÂ³digo do comando.
+		//Retorna as portas que ficarÃƒÂ£o abertas e 
+		//Muda as memÃƒÂ³rias que mudarÃƒÂ£o
 	
 		AX_label = ax_label; 
 		BX_label = bx_label;
