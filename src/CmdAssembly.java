@@ -17,8 +17,16 @@ public class CmdAssembly {
 	
 	private String [] comandos;
 	private JTable tabela;
+	private JTable instructionsTable;
+	public AssemblyScreen assemblyScreen;
+	
 	private JLabel AX_label, BX_label, CX_label, DX_label,Instructions_label;
 	String AX, BX, CX, DX; // inicializacao dos contadores
+	
+	
+	public void assembly(AssemblyScreen as){
+		this.assemblyScreen = as;
+	}
 	
 	public int getRowByValue(JTable model, String value) {
 		//http://stackoverflow.com/questions/14196974/getting-a-row-index-in-a-jtable-using-only-a-value-included-in-the-row
@@ -180,7 +188,6 @@ public class CmdAssembly {
 		}
 		
 		
-		
 		//TODO apagar os prints
 		System.out.println("[DEBUG] Cmd:" + command);
 		System.out.println("[DEBUG] X1:" + x1);
@@ -218,6 +225,64 @@ public class CmdAssembly {
 						DX = resultado;
 					}
 				}
+				
+				//ADD BX, AX /Registradores
+				if (!memoryX1 && !memoryX2 && registrador1 && registrador2){
+//					{"IR < [PC]","2,12"}
+//					PC ++ "????"
+//					"X < BX", "9!, 19"
+//					"ULA < AX", "7!,20" 
+//					"BX < AC",  "8!, 21"
+				}
+//				ADD [123], AX Registradores + memoryX1
+				if (memoryX1 && !memoryX2 && !registrador1 && registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++ "????"
+//					MAR < IR
+//					"MBR < [MAR]", "22, 23, 24, 25, 26"
+//					X  < MBR. "4,17"
+//					"ULA < AX", "7!, 20"
+//					"MBR < AC", "4, 20"
+//					"MBR < [MAR]". "22, 23, 24, 25, 26"			
+//					
+				}
+//				ADD AX, [123] Registradores + memoryX2
+				if (!memoryX1 && memoryX2 && registrador1 && !registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++ "????"
+//					MAR < IR
+//					"MBR < [MAR]", "22, 23, 24, 25, 26"
+//					ULA  < MBR. "4,20"
+//					"X < AX", "7!, 19"
+//					"AX < AC", "6!,21"
+//					
+					
+				}
+//				ADD AX, 2  /memoryX1
+				if (!memoryX1 && !memoryX2 && registrador1 && !registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++ "????"
+//					"ULA < AX", "7!,20"
+//					"x < Dá onde vem o dois?", 
+//					"AX < AC", "6!, 21"
+				}
+//				ADD [123], 2  /Registradores1
+				if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++
+//					MAR < IR
+//					"MBR < [Mar]", "22, 23, 24, 25, 26"}
+//					ULA  < MBR. "4,20"
+//					"x < Dá onde vem o dois?", "19" 
+//					 "AC < ULA", "Porta dedicada" 
+//					"MAR < IR ", "3,17"// Mar recebeu o endereço
+//					"MBR < AC", "4, 21" // Recebeu a soma
+//					MBR < [MAR], "22, 23, 24, 25, 26"
+				}				
+
+				
+				
+				
 				break;
 			case "SUB":
 				resultado = subFunction(v1,v2);
@@ -238,12 +303,126 @@ public class CmdAssembly {
 						DX = resultado;
 					}
 				}
+
+				//ADD BX, AX /Registradores
+				if (!memoryX1 && !memoryX2 && registrador1 && registrador2){
+//					{"IR < [PC]","2,12"}
+//					PC ++ "????"
+//					"X < BX", "9!, 19"
+//					"ULA < AX", "7!,20" 
+//					"BX < AC",  "8!, 21"
+				}
+//				ADD [123], AX Registradores + memoryX1
+				if (memoryX1 && !memoryX2 && !registrador1 && registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++ "????"
+//					MAR < IR
+//					"MBR < [MAR]", "22, 23, 24, 25, 26"
+//					X  < MBR. "4,17"
+//					"ULA < AX", "7!, 20"
+//					"MBR < AC", "4, 20"
+//					"MBR < [MAR]". "22, 23, 24, 25, 26"			
+//					
+				}
+//				ADD AX, [123] Registradores + memoryX2
+				if (!memoryX1 && memoryX2 && registrador1 && !registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++ "????"
+//					MAR < IR
+//					"MBR < [MAR]", "22, 23, 24, 25, 26"
+//					ULA  < MBR. "4,20"
+//					"X < AX", "7!, 19"
+//					"AX < AC", "6!,21"
+//					
+					
+				}
+//				ADD AX, 2  /memoryX1
+				if (!memoryX1 && !memoryX2 && registrador1 && !registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++ "????"
+//					"ULA < AX", "7!,20"
+//					"x < Dá onde vem o dois?", 
+//					"AX < AC", "6!, 21"
+				}
+//				ADD [123], 2  /Registradores1
+				if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++
+//					MAR < IR
+//					"MBR < [Mar]", "22, 23, 24, 25, 26"}
+//					ULA  < MBR. "4,20"
+//					"x < Dá onde vem o dois?", "19" 
+//					 "AC < ULA", "Porta dedicada" 
+//					"MAR < IR ", "3,17"// Mar recebeu o endereço
+//					"MBR < AC", "4, 21" // Recebeu a soma
+//					MBR < [MAR], "22, 23, 24, 25, 26"
+				}				
+
+				
 				break;
 			case "MUL":
 				int auxMul = toDec(AX);
-				AX = toHex(auxMul *= v1);	
+				AX = toHex(auxMul *= v1);
+				
+//				MUL 3
+				if (!memoryX1 && !memoryX2 && !registrador1 && !registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++
+//					"X < MAGIA", "MAGIA, 19"
+//					"ULA < AX", "7, 20"
+//					"AX<AC", "6,21"
+				}
+//				MUL BX
+				if (!memoryX1 && !memoryX2 && registrador1 && !registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++
+//					"X < BX", "9!, 19"
+//					"ULA < AX", "7, 20"
+//					"AX<AC", "6,21"
+				}
+//				MUL [1234]
+				if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++
+//					"MAR < IR", "17, 3"
+//					MBR < [Mar],  "22, 23, 24, 25, 26"
+//					X  < MBR. "5,19"
+//					"ULA < AX", "7, 20"
+//					"AX<AC", "6,21"
+					
+				}
 				break;
 			case "DIV":
+//				DIV 3
+				if (!memoryX1 && !memoryX2 && !registrador1 && !registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++
+//					"X < MAGIA", "MAGIA, 19"
+//					"ULA < AX", "7, 20"
+//					"AX<AC", "6,21"
+//					+ Resto
+				}
+//				DIV BX
+				if (!memoryX1 && !memoryX2 && registrador1 && !registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++
+//					"X < BX", "9!, 19"
+//					"ULA < AX", "7, 20"
+//					"AX<AC", "6,21"
+//					+ Resto
+				}
+//				DIV [1234]
+				if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++
+//					"MAR < IR", "17, 3"
+//					MBR < [Mar],  "22, 23, 24, 25, 26"
+//					X  < MBR. "5,19"
+//					"ULA < AX", "7, 20"
+//					"AX<AC", "6,21"
+					//+ Resto
+					
+				}
 				if (v1 == 0) throw new IllegalArgumentException("Nao pode divir por zero");
 				else {
 					AX = Integer.toString(toDec(DX));
@@ -272,6 +451,27 @@ public class CmdAssembly {
 					}
 				}
 				
+			
+//				INC BX
+				if (!memoryX1 && !memoryX2 && registrador1 && !registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++
+//					"X < BX", "9!, 19"
+//					"BX<AC", "6,21"
+				}
+//				INC [1234]
+				if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++
+//					"MAR < IR", "17, 3"
+//					MBR < [Mar],  "22, 23, 24, 25, 26"
+//					X  < MBR. "5,19"
+//					"MBR < AC", "4, 21" // Recebeu a soma
+//					MBR < [MAR], "22, 23, 24, 25, 26"
+					
+					
+				}
+				
 				break;
 			case "DEC":
 				v1--;
@@ -292,6 +492,28 @@ public class CmdAssembly {
 						DX = resultado;
 					}
 				}
+				
+//				INC BX
+				if (!memoryX1 && !memoryX2 && registrador1 && !registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++
+//					"X < BX", "9!, 19"
+//					"BX<AC", "6,21"
+				}
+//				INC [1234]
+				if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++
+//					"MAR < IR", "17, 3"
+//					MBR < [Mar],  "22, 23, 24, 25, 26"
+//					X  < MBR. "5,19"
+//					"MBR < AC", "4, 21" // Recebeu a soma
+//					MBR < [MAR], "22, 23, 24, 25, 26"
+					
+					
+				}
+				
+				
 				break;
 			case "CMP":
 				int result = v1 - v2;
@@ -302,12 +524,70 @@ public class CmdAssembly {
 				
 				if(result < 0) flagSinal = 1;
 				if(result >= 0) flagSinal = 0;
+				
+
+				//CMP BX, AX /Registradores
+				if (!memoryX1 && !memoryX2 && registrador1 && registrador2){
+//					{"IR < [PC]","2,12"}
+//					PC ++ "????"
+//					"X < BX", "9!, 19"
+//					"ULA < AX", "7!,20" 
+//					"Feitiço < AC",  "Feitiço, 21"
+				}
+//				CMP [123], AX Registradores + memoryX1
+				if (memoryX1 && !memoryX2 && !registrador1 && registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++ "????"
+//					MAR < IR
+//					"MBR < [MAR]", "22, 23, 24, 25, 26"
+//					X  < MBR. "4,17"
+//					"Feitiço < AX", "Feitiço, 20"
+//						
+//					
+				}
+//				CMP AX, [123] Registradores + memoryX2
+				if (!memoryX1 && memoryX2 && registrador1 && !registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++ "????"
+//					MAR < IR
+//					"MBR < [MAR]", "22, 23, 24, 25, 26"
+//					ULA  < MBR. "4,20"
+//					"X < AX", "7!, 19"
+//					"Feitiço < AC", "Feitiço!,21"
+//					
+					
+				}
+//				CMP AX, 2  /memoryX1
+				if (!memoryX1 && !memoryX2 && registrador1 && !registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++ "????"
+//					"ULA < AX", "7!,20"
+//					"x < Dá onde vem o dois?", 
+//					"Feitiço < AC", "Feitiço!, 21"
+				}
+//				CMP [123], 2  /Registradores1
+				if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++
+//					MAR < IR
+//					"MBR < [Mar]", "22, 23, 24, 25, 26"}
+//					ULA  < MBR. "4,20"
+//					"x < Dá onde vem o dois?", "19" 
+//					 "AC < ULA", "Porta dedicada" 
+//					"Feitiço < AC", "Feitiço!, 21"		
+				}				
+
 				break;
 			case "JMP":
 				executeLine(v1);
 				//Subustituir no Label linhaSendoExecutada
 				AssemblyScreen as = new AssemblyScreen ();
 				as.atualizaLinha(v1);
+				
+//				JMP N //Número da LINHA, já que utilizamos apenas os números da linha, não temos a TAG com a referência na memória para esse ponto do programa. Utilizaremos essa simplificação para mostrar a atualização de PC.
+//				MAR < N
+//				"MBR < [Mar]", "22, 23, 24, 25, 26"}
+//				PC < [MBR]
 				break;
 			case "JZ":
 				if(flagZero == null) throw new IllegalArgumentException("CMP NAO FOI EXECUTADO");
@@ -351,6 +631,48 @@ public class CmdAssembly {
 						DX = resultado;
 					}
 				}
+				
+				
+
+				//MOV BX, AX /Registradores
+				if (!memoryX1 && !memoryX2 && registrador1 && registrador2){
+//					{"IR < [PC]","2,12"}
+//					PC ++ "????"
+//					"BX < AX",  "7!, 8!"
+				}
+//				MOV [123], AX Registradores + memoryX1
+				if (memoryX1 && !memoryX2 && !registrador1 && registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++ "????"
+//					"MAR < IR, "17, 3"
+//					"MBR < AX", "4, 7"
+//					"MBR < [MAR]". "22, 23, 24, 25, 26"			
+//					
+				}
+//				MOV AX, [123] Registradores + memoryX2
+				if (!memoryX1 && memoryX2 && registrador1 && !registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++ "????"
+//					MAR < IR
+//					"MBR < [MAR]", "22, 23, 24, 25, 26"
+//					AX < MBR "5, 6"
+//					
+					
+				}
+//				MOV AX, 2  /memoryX1
+				if (!memoryX1 && !memoryX2 && registrador1 && !registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++ "????"
+//					AX < "Magia", "Magia, 6"
+				}
+//				MOV [123], 2  /Registradores1
+				if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
+//					{"IR < [PC]","2,14"}
+//					PC ++
+//					MAR < IR
+//					"MBR < MAGIA", "Magia, 4"
+//					MBR < [MAR], "22, 23, 24, 25, 26"
+				}	
 				break;
 			default:
 				throw new IllegalArgumentException("Comando Invalido: " + command + " [>] tente ADD AX, 10");
@@ -362,15 +684,16 @@ public class CmdAssembly {
 		
 	}
 	
-	public String execute(JTable table, JTextPane txtAssembly, JLabel ax_label, JLabel bx_label,JLabel cx_label, JLabel dx_label, JLabel instructions_label){
+	public String execute(JTable table, JTextPane txtAssembly, JLabel ax_label, JLabel bx_label,JLabel cx_label, JLabel dx_label, JTable instructions_table){
 		AX = "0"; BX = "0"; CX = "0"; DX = "0";
 		
 		//Limpar comandos
-		
+		assemblyScreen.marLabel.setText("Mudou!");
 		//Cria a lista ligada ou matriz com o cÃƒÂ³digo.
 		String codigo = txtAssembly.getText();
 		comandos = codigo.split("\\r?\\n");
 		tabela = table;
+		instructionsTable = instructions_table;
 		//updateBus(openBars, abre );
 		
 		//Verifica qual o comando e roda o cÃƒÂ³digo do comando.
@@ -381,7 +704,7 @@ public class CmdAssembly {
 		BX_label = bx_label;
 		CX_label = cx_label;
 		DX_label = dx_label;
-		Instructions_label = instructions_label;
+		instructionsTable= instructions_table;
 		
 		 updateRegistradores();
 		
