@@ -1,7 +1,9 @@
+package src;
+
 /*
 EP2-OCD
 Filipe Filardi de Jesus, 8516761
-Gabriel Salgado Sina 
+Gabriel Salgado Sina, 8061448
 Rodrigo Guerra, 8516497
 */
 
@@ -75,24 +77,31 @@ public class AssemblyScreen extends JFrame {
 		textAssembly.setBounds(33, 6, 171, 658);
 		contentPane.add(textAssembly);
 		
-		String[] columnNames = {"Memória", "Dados"};
+		String[] columnNames = {"Memoria", "Dados"};
 		
-		Object[][] data = {{"12341234", "33"},{"87654321", "11"},{"76543210", "3"}};
+		Object[][] data = {{"000", "33"},{"004", "11"},{"FF8", "3"}};
 
-	//	Object[][] data = new Object[40][40];
+		/*
+		//TODO ARRUMAR OQ CAGAMOS
+		Object[][] data = new Object[4088][2];
+		data[0][0] = 0;
+		for(int i = 1; i<= data.length; i++){
+			data[i][0] = Integer.parseInt(CmdAssembly.toHex(i));
+		}
+		*/
 		
 		table = new JTable(data, columnNames);
 		table.setBounds(942, 139, 289, 531);
 		contentPane.add(table);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon("CPU.png"));
+		lblNewLabel.setIcon(new ImageIcon("src/CPU.png"));
 		lblNewLabel.setBounds(216, 226, 507, 427);
 		contentPane.add(lblNewLabel);
 		
 		
 		JButton btnExecutar = new JButton("Executar");
-		JButton btnNextLine = new JButton("Próxima Linha");
+		JButton btnNextLine = new JButton("Proxima Linha");
 		JButton btnParar = new JButton("Parar");
 		JLabel lblExecutandoLinha = new JLabel("Executando Linha:");
 		JLabel linhaSendoExecutada = new JLabel("0");
@@ -158,7 +167,7 @@ public class AssemblyScreen extends JFrame {
 		lblNewLabel_1.setBounds(941, 7, 117, 16);
 		contentPane.add(lblNewLabel_1);
 		
-		JLabel lblNewLabel_2 = new JLabel("Memória (hex):");
+		JLabel lblNewLabel_2 = new JLabel("Memoria (hex):");
 		lblNewLabel_2.setBounds(942, 111, 185, 16);
 		contentPane.add(lblNewLabel_2);
 		
@@ -197,7 +206,7 @@ public class AssemblyScreen extends JFrame {
 				textAssembly.setEnabled(true);
 			}
 		});
-		//Todo: Quanto não tem mais linhas?
+		//Todo: Quanto nao tem mais linhas?
 		
 		
 		
