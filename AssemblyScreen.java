@@ -1,32 +1,31 @@
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
+/*
+EP2-OCD
+Filipe Filardi de Jesus, 8516761
+Rodrigo Guerra, 8516497
+*/
 
+
+import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextPane;
 import javax.swing.JTextArea;
-
-import java.awt.Panel;
-import java.awt.Color;
-
 import javax.swing.JTable;
-
-import java.awt.Canvas;
-
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
-
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
 
 
 public class AssemblyScreen extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
+	private JLabel linhaSendoExecutada;
 
 	/**
 	 * Launch the application.
@@ -42,6 +41,10 @@ public class AssemblyScreen extends JFrame {
 				}
 			}
 		});
+	}
+	
+	public void atualizaLinha(int i){
+		linhaSendoExecutada.setText(Integer.toString(i));
 	}
 
 	/**
@@ -63,34 +66,23 @@ public class AssemblyScreen extends JFrame {
 		contentPane.add(lineNumber);
 		
 		JTextPane textAssembly = new JTextPane();
-		textAssembly.setBounds(33, 6, 115, 658);
+		textAssembly.setBounds(33, 6, 171, 658);
 		contentPane.add(textAssembly);
 		
 		String[] columnNames = {"Memória", "Dados"};
 		
-		Object[][] data = {{"0x12341234", ""},{"0x87654321", ""},{"0x76543210", ""}};
+		Object[][] data = {{"12341234", "33"},{"87654321", "11"},{"76543210", "3"}};
 
 	//	Object[][] data = new Object[40][40];
 		
 		table = new JTable(data, columnNames);
-		table.setBounds(728, 128, 347, 109);
+		table.setBounds(942, 139, 289, 531);
 		contentPane.add(table);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon("/Users/guerra/Dropbox/EACH/OCD/EP2/Interpreter-Assembly/CPU.png"));
-		lblNewLabel.setBounds(174, 128, 520, 520);
+		lblNewLabel.setIcon(new ImageIcon("/Users/guerra/Dropbox/EACH/OCD/EP2/Interpreter-Assembly/OCD.png"));
+		lblNewLabel.setBounds(204, 6, 205, 200);
 		contentPane.add(lblNewLabel);
-		
-		
-		
-		JLabel lblPortasAbertas = new JLabel("Portas Abertas:");
-		lblPortasAbertas.setBounds(174, 72, 177, 16);
-		contentPane.add(lblPortasAbertas);
-		
-		JLabel openBars = new JLabel("1, 2, 3");
-		openBars.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-		openBars.setBounds(174, 88, 520, 29);
-		contentPane.add(openBars);
 		
 		
 		JButton btnExecutar = new JButton("Executar");
@@ -124,11 +116,56 @@ public class AssemblyScreen extends JFrame {
 		panel.setBounds(519, 661, -21, -13);
 		contentPane.add(panel);
 		
+		JLabel lblAx = new JLabel("AX:");
+		lblAx.setBounds(974, 29, 34, 16);
+		contentPane.add(lblAx);
+		
+		JLabel ax_label = new JLabel("");
+		ax_label.setBounds(1002, 29, 61, 16);
+		contentPane.add(ax_label);
+		
+		JLabel lblCx = new JLabel("CX:");
+		lblCx.setBounds(1062, 30, 34, 16);
+		contentPane.add(lblCx);
+		
+		JLabel cx_label = new JLabel("");
+		cx_label.setBounds(1089, 30, 61, 16);
+		contentPane.add(cx_label);
+		
+		JLabel lblBx = new JLabel("BX:");
+		lblBx.setBounds(974, 50, 34, 16);
+		contentPane.add(lblBx);
+		
+		JLabel bx_label = new JLabel("");
+		bx_label.setBounds(1001, 50, 61, 16);
+		contentPane.add(bx_label);
+		
+		JLabel lblDx = new JLabel("DX:");
+		lblDx.setBounds(1059, 49, 34, 16);
+		contentPane.add(lblDx);
+		
+		JLabel dx_label = new JLabel("");
+		dx_label.setBounds(1086, 49, 61, 16);
+		contentPane.add(dx_label);
+		
+		JLabel instructions_label = new JLabel("<html>\nT1: MAR < PC <br/>\nT2: MBR < MAR + 1<br/>&nbsp;&nbsp;&nbsp;&nbsp;\nPC++<br/>\nT3: IR <- MBR\n</html>");
+		instructions_label.setVerticalAlignment(SwingConstants.TOP);
+		instructions_label.setBounds(547, 14, 385, 651);
+		contentPane.add(instructions_label);
+		
+		JLabel lblNewLabel_1 = new JLabel("Registradores:");
+		lblNewLabel_1.setBounds(941, 7, 117, 16);
+		contentPane.add(lblNewLabel_1);
+		
+		JLabel lblNewLabel_2 = new JLabel("Memória (hex):");
+		lblNewLabel_2.setBounds(942, 111, 185, 16);
+		contentPane.add(lblNewLabel_2);
+		
 		CmdAssembly cmdAssembly = new CmdAssembly();
 		
 		btnExecutar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {		
-				String portasAbertas = cmdAssembly.execute(table, textAssembly, openBars);
+				String portasAbertas = cmdAssembly.execute(table, textAssembly, ax_label, bx_label, cx_label, dx_label, instructions_label);
 				btnExecutar.setEnabled(false);
 				btnNextLine.setEnabled(true);
 				btnParar.setEnabled(true);
