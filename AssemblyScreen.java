@@ -1,6 +1,7 @@
 /*
 EP2-OCD
 Filipe Filardi de Jesus, 8516761
+Gabriel Salgado Sina 
 Rodrigo Guerra, 8516497
 */
 
@@ -58,6 +59,11 @@ public class AssemblyScreen extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		JLabel instructions_label = new JLabel("<html>\nBusca\n\n<br/>\nT1: MAR <-  PC &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Portas: 2,3 <br/>\nT2: MBR <-  [MAR] + 1 Portas: 2, 3,3<br/>&nbsp;&nbsp;&nbsp;&nbsp; \nPC++<br/>\nT3: IR <- MBR\n</html>");
+		instructions_label.setVerticalAlignment(SwingConstants.TOP);
+		instructions_label.setBounds(547, 14, 385, 651);
+		contentPane.add(instructions_label);
+		
 		JTextArea lineNumber = new JTextArea();
 		lineNumber.setText("0:\n1:\n2:\n3:\n4:\n5:\n6:\n7:\n8:\n9:\n10:\n11:\n12:\n13:\n14:\n15:\n16:\n17:\n18:\n19:\n20:\n21:\n22:\n23:\n24:\n25:\n26:\n27:\n28:\n29:\n30:\n31:\n32:\n33:\n34:\n35:\n36:\n37:\n38:\n39:\n40:");
 		lineNumber.setWrapStyleWord(true);
@@ -80,8 +86,8 @@ public class AssemblyScreen extends JFrame {
 		contentPane.add(table);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon("/Users/guerra/Dropbox/EACH/OCD/EP2/Interpreter-Assembly/OCD.png"));
-		lblNewLabel.setBounds(204, 6, 205, 200);
+		lblNewLabel.setIcon(new ImageIcon("CPU.png"));
+		lblNewLabel.setBounds(216, 226, 507, 427);
 		contentPane.add(lblNewLabel);
 		
 		
@@ -147,11 +153,6 @@ public class AssemblyScreen extends JFrame {
 		JLabel dx_label = new JLabel("");
 		dx_label.setBounds(1086, 49, 61, 16);
 		contentPane.add(dx_label);
-		
-		JLabel instructions_label = new JLabel("<html>\nT1: MAR < PC <br/>\nT2: MBR < MAR + 1<br/>&nbsp;&nbsp;&nbsp;&nbsp;\nPC++<br/>\nT3: IR <- MBR\n</html>");
-		instructions_label.setVerticalAlignment(SwingConstants.TOP);
-		instructions_label.setBounds(547, 14, 385, 651);
-		contentPane.add(instructions_label);
 		
 		JLabel lblNewLabel_1 = new JLabel("Registradores:");
 		lblNewLabel_1.setBounds(941, 7, 117, 16);

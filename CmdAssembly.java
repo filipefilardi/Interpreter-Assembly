@@ -1,6 +1,7 @@
 /*
 EP2-OCD
 Filipe Filardi de Jesus, 8516761
+Gabriel Salgado Sina
 Rodrigo Guerra, 8516497
 */
 
