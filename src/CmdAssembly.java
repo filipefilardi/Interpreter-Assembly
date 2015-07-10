@@ -20,7 +20,7 @@ public class CmdAssembly {
 	private JTable instructionsTable;
 	public AssemblyScreen assemblyScreen;
 	
-	private JLabel AX_label, BX_label, CX_label, DX_label,Instructions_label, Sinal_label, Zero_label;
+	private JLabel AX_label, BX_label, CX_label, DX_label,Instructions_label, Sinal_label, Zero_label, Alert_label;
 	String AX, BX, CX, DX; // inicializacao dos contadores
 	
 	
@@ -48,7 +48,8 @@ public class CmdAssembly {
 	}
 	
 	public int getMemoria(JTable table, String endereco){
-		return Integer.parseInt(table.getValueAt(getRowByValue(table, endereco), 1).toString() );
+		int linhaDaMemoria = getRowByValue(table, endereco);
+		return toDec(table.getValueAt(linhaDaMemoria,1).toString());
 	}
 	
 	public void updateBus(JLabel openBars, Integer[] portas){
@@ -116,10 +117,17 @@ public class CmdAssembly {
 		}
 		
 		if (x2.equals("")){
-			if(command.equals("ADD") || command.equals("SUB") || command.equals("CMP")) throw new IllegalArgumentException("Segundo parametro não pode ser nulo"); //TODO Imprimir na tela do programa
-			else x2= "0";
+			if(command.equals("ADD") || command.equals("SUB") || command.equals("CMP")) {
+				Alert_label.setText("Segundo parametro não pode ser nulo.");
+				throw new IllegalArgumentException("Segundo parametro não pode ser nulo."); //TODO Imprimir na tela do programa
+			}else {
+				x2= "0";
+			}
 		}
-		if(x1.length() > 8 || x2.length() > 8) throw new IllegalArgumentException("O numero tem que ser menor que 32 bits");
+		if(x1.length() > 8 || x2.length() > 8) {
+			Alert_label.setText("O numero tem que ser menor que 32 bits");
+			throw new IllegalArgumentException("O numero tem que ser menor que 32 bits");
+		}
 		
 		
 		//Transformando em decimal
@@ -161,7 +169,7 @@ public class CmdAssembly {
 			}		
 		}else if (memoryX1){
 			v1 = getMemoria(tabela,x1);
-			v1 = toDec(Integer.toString(v1));
+//			v1 = toDec(Integer.toString(v1));
 		}else{
 			v1 =  toDec(x1);
 		}
@@ -182,13 +190,13 @@ public class CmdAssembly {
 			
 		}else if (memoryX2){
 			v2 = getMemoria(tabela, x2);
-			v2 = toDec(Integer.toString(v2));
+//			v2 = toDec(Integer.toString(v2));
 		}else{
 			v2 =  toDec(x2);
 		}
 		
 		
-		//TODO apagar os prints
+		
 		System.out.println("[DEBUG] Cmd:" + command);
 		System.out.println("[DEBUG] X1:" + x1);
 		System.out.println("[DEBUG] X2:" + x2);
@@ -199,48 +207,51 @@ public class CmdAssembly {
 		System.out.println("[DEBUG] AX:" + AX);
 		System.out.println("[DEBUG] BX:" + BX);
 		
-		if(command.equalsIgnoreCase("") || x1.equalsIgnoreCase("") || x2.equalsIgnoreCase("")) throw new IllegalArgumentException("Parametros nao podem ser nulos");
+		if(command.equalsIgnoreCase("") || x1.equalsIgnoreCase("") || x2.equalsIgnoreCase("")){
+			Alert_label.setText("Parametros nao podem ser nulos");
+			throw new IllegalArgumentException("Parametros nao podem ser nulos");
+		}
 
-		Object [][] objMicOp = new Object[20][4];
+		String [][] objMicOp = new String[20][4];
 
-		String x1Entrada; 
-		String x1Saida;
+		String x1Entrada=""; 
+		String x1Saida ="";
 
-		String x2Entrada;
-		String x2Saida;
+		String x2Entrada ="";
+		String x2Saida = "";
 
 
 		if (x1.equals("AX")){
-			x1Entrada = 6;
-			x1Saida = 7;
+			x1Entrada = "6";
+			x1Saida = "7";
 		}
 		if (x1.equals("BX")){
-			x1Entrada = 8;
-			x1Saida = 9;
+			x1Entrada = "8";
+			x1Saida = "9";
 		}
 		if (x1.equals("CX")){
-			x1Entrada = 10;
-			x1Saida = 11;
+			x1Entrada = "10";
+			x1Saida = "11";
 		}
 		if (x1.equals("DX")){
-			x1Entrada = 12;
-			x1Saida = 13;
+			x1Entrada = "12";
+			x1Saida = "13";
 		}
 		if (x2.equals("AX")){
-			x2Entrada = 6;
-			x2Saida = 7;
+			x2Entrada = "6";
+			x2Saida = "7";
 		}
 		if (x2.equals("BX")){
-			x2Entrada = 8;
-			x2Saida = 9;
+			x2Entrada = "8";
+			x2Saida = "9";
 		}
 		if (x2.equals("CX")){
-			x2Entrada = 10;
-			x2Saida = 11;
+			x2Entrada = "10";
+			x2Saida = "11";
 		}
 		if (x2.equals("DX")){
-			x2Entrada = 12;
-			x2Saida = 13;
+			x2Entrada = "12";
+			x2Saida = "13";
 		}
 
 		String resultado;
@@ -271,11 +282,10 @@ public class CmdAssembly {
 				//ADD BX, AX /Registradores
 			if (!memoryX1 && !memoryX2 && registrador1 && registrador2){
 //					{"IR < [PC]","2,14"}
-//					PC ++ "????"
+//					PC ++
 //					"X < BX", "9!, 19"
 //					"ULA < AX", "7!,20" 
 //					"BX < AC",  "8!, 21"
-//					Object[][] dataInstrucoes = {{"T1", "Mar< PC", "???"},{"T2", "MBR< [MAR]", "???"},{"", "PC++", "???"}, {"T3", "IR < MBR", "???"}};
 
 				objMicOp[0][0] = "T1: ";
 				objMicOp[0][1] =  "IR < [PC]";
@@ -283,149 +293,151 @@ public class CmdAssembly {
 				objMicOp[0][3] = "";
 
 				objMicOp[1][0] = "T2: ";
-				objMicOp[1][1] =  "X < BX";
-				objMicOp[1][2] =  "9!,19";
+				objMicOp[1][1] =  "X <" +x1;
+				objMicOp[1][2] =  x1Saida +",19";
 				objMicOp[1][3] =  "";
 
 				objMicOp[2][0] = "T3: ";
-				objMicOp[2][1] =  "ULA < AX";					
-				objMicOp[2][2] =  "7!,20";
+				objMicOp[2][1] =  "ULA <"+ x2;					
+				objMicOp[2][2] =  x2Saida +",20";
 				objMicOp[2][3] =  "";
 
 				objMicOp[3][0] = "T4: ";
-				objMicOp[3][1] =  "BX < AC"
-				objMicOp[3][2] =  "8!, 21";
+				objMicOp[3][1] =  x1 +" < AC";
+				objMicOp[3][2] =  x1Entrada + ", 21";
 				objMicOp[3][3] =  "";
-
+				
+			}
+			
 //				ADD [123], AX Registradores + memoryX1
-				if (memoryX1 && !memoryX2 && !registrador1 && registrador2){
+			if (memoryX1 && !memoryX2 && !registrador1 && registrador2){
 //					{"IR < [PC]","2,14"}
-//					PC ++ "????"
+//					PC ++
 //					MAR < IR
 //					"MBR < [MAR]", "22, 23, 24, 25, 26"
 //					X  < MBR. "4,17"
 //					"ULA < AX", "7!, 20"
 //					"MBR < AC", "4, 20"
 //					"MBR < [MAR]". "22, 23, 24, 25, 26"
-					objMicOp[0][0] = "T1: ";
-					objMicOp[0][1] = "IR < [PC]";
-					objMicOp[0][2] = "2,14";
-					objMicOp[0][3] = "";
+				objMicOp[0][0] = "T1: ";
+				objMicOp[0][1] = "IR < [PC]";
+				objMicOp[0][2] = "2,14";
+				objMicOp[0][3] = "";
 
-					objMicOp[1][0] = "";
-					objMicOp[1][1] = "PC ++";
-					objMicOp[1][2] = "";
-					objMicOp[1][3] = "";
+				objMicOp[1][0] = "";
+				objMicOp[1][1] = "PC ++";
+				objMicOp[1][2] = "";
+				objMicOp[1][3] = "";
 
-					objMicOp[2][0] = "T2: ";
-					objMicOp[2][1] = "MBR < [MAR]";
-					objMicOp[2][2] = "22,23,24,25,26";
-					objMicOp[2][3] = "";
+				objMicOp[2][0] = "T2: ";
+				objMicOp[2][1] = "MBR < [MAR]";
+				objMicOp[2][2] = "22,23,24,25,26";
+				objMicOp[2][3] = "";
 
-					objMicOp[3][0] = "T3: ";
-					objMicOp[3][1] =  "X  < MBR";
-					objMicOp[3][2] =  "4, 17";
-					objMicOp[3][3] =  "";
+				objMicOp[3][0] = "T3: ";
+				objMicOp[3][1] =  "X  < MBR";
+				objMicOp[3][2] =  "4, 17";
+				objMicOp[3][3] =  "";
 
-					objMicOp[4][0] = "T4: ";
-					objMicOp[4][1] = "ULA < AX";
-					objMicOp[4][2] = "7!, 20";
-					objMicOp[4][3] =  "";
+				objMicOp[4][0] = "T4: ";
+				objMicOp[4][1] = "ULA <"+ x2;
+				objMicOp[4][2] =  x2Saida+", 20";
+				objMicOp[4][3] =  "";
 
-					objMicOp[5][0] = "T5: ";
-					objMicOp[5][1] = "MBR < AC";
-					objMicOp[5][2] = "4, 20";
-					objMicOp[5][3] = "";
+				objMicOp[5][0] = "T5: ";
+				objMicOp[5][1] = "MBR < AC";
+				objMicOp[5][2] = "4, 20";
+				objMicOp[5][3] = "";
 
-					objMicOp[6][0] = "T6: ";
-					objMicOp[6][1] = "MBR < [MAR]";
-					objMicOp[6][2] = "22, 23, 24, 25, 26";
-					objMicOp[6][3] = ""
+				objMicOp[6][0] = "T6: ";
+				objMicOp[6][1] = "MBR < [MAR]";
+				objMicOp[6][2] = "22, 23, 24, 25, 26";
+				objMicOp[6][3] = "";
 
 //					
-				}
+			}
 //				ADD AX, [123] Registradores + memoryX2
-				if (!memoryX1 && memoryX2 && registrador1 && !registrador2){
+			if (!memoryX1 && memoryX2 && registrador1 && !registrador2){
 //					{"IR < [PC]","2,14"}
-//					PC ++ "????"
+//					PC ++
 //					MAR < IR
 //					"MBR < [MAR]", "22, 23, 24, 25, 26"
 //					ULA  < MBR. "4,20"
 //					"X < AX", "7!, 19"
 //					"AX < AC", "6!,21"
-					objMicOp[0][0] = "T1: ";
-					objMicOp[0][1] = "IR < [PC]";
-					objMicOp[0][2] =  "2,14";
-					objMicOp[0][3] =  "";
+				objMicOp[0][0] = "T1: ";
+				objMicOp[0][1] = "IR < [PC]";
+				objMicOp[0][2] =  "2,14";
+				objMicOp[0][3] =  "";
 
-					objMicOp[1][0] = "";
-					objMicOp[1][1] =  "PC ++";
-					objMicOp[1][2] =  "";
-					objMicOp[1][3] =  "";
-
-					
-					objMicOp[2][0] = "T2: ";
-					objMicOp[2][1] = "MAR < IR";
-					objMicOp[2][2] = "";					
-					objMicOp[2][3] = "";
-					
-					objMicOp[3][0] = "T3: ";
-					objMicOp[3][1] =  "MBR < [MAR]";
-					objMicOp[3][2] =  "22,23,24,25,26";
-					objMicOp[3][3] =  "";
-
-					objMicOp[4][0] = "T4: ";
-					objMicOp[4][1] =  "ULA  < MBR";
-					objMicOp[4][2] =  "4,20";
-					objMicOp[4][3] =  "";
-
-					objMicOp[5][0] = "T5: ";
-					objMicOp[5][1] =  "X < AX";
-					objMicOp[5][2] =  "7!, 19";
-					objMicOp[5][3] =  "";
-
-					objMicOp[6][0] = "T6: ";
-					objMicOp[6][1] =  "AX < AC";
-					objMicOp[6][2] =  "6!,21";
-					objMicOp[6][3] =  "";
+				objMicOp[1][0] = "";
+				objMicOp[1][1] =  "PC ++";
+				objMicOp[1][2] =  "";
+				objMicOp[1][3] =  "";
 
 
-				}
+				objMicOp[2][0] = "T2: ";
+				objMicOp[2][1] = "MAR < IR";
+				objMicOp[2][2] = "";					
+				objMicOp[2][3] = "";
+
+				objMicOp[3][0] = "T3: ";
+				objMicOp[3][1] =  "MBR < [MAR]";
+				objMicOp[3][2] =  "22,23,24,25,26";
+				objMicOp[3][3] =  "";
+
+				objMicOp[4][0] = "T4: ";
+				objMicOp[4][1] =  "ULA  < MBR";
+				objMicOp[4][2] =  "4,20";
+				objMicOp[4][3] =  "";
+
+				objMicOp[5][0] = "T5: ";
+				objMicOp[5][1] =  "X <"+ x1;
+				objMicOp[5][2] =  x1Saida+ ", 19";
+				objMicOp[5][3] =  "";
+
+				objMicOp[6][0] = "T6: ";
+				objMicOp[6][1] =  "AX < AC";
+				objMicOp[6][2] =  "6!,21";
+				objMicOp[6][3] =  "";
+
+
+			}
 //				ADD AX, 2  /memoryX1
-				if (!memoryX1 && !memoryX2 && registrador1 && !registrador2){
+			if (!memoryX1 && !memoryX2 && registrador1 && !registrador2){
 //					{"IR < [PC]","2,14"}
-//					PC ++ "????"
+//					PC ++
 //					"ULA < AX", "7!,20"
 //					"x < Dá onde vem o dois?", 
 //					"AX < AC", "6!, 21"
-					objMicOp[0][0] = "T1: "; 
-					objMicOp[0][1] = "IR < [PC]";					
-					objMicOp[0][1] =  "2,14";
-					objMicOp[0][1] =  "";
+				objMicOp[0][0] = "T1: "; 
+				objMicOp[0][1] = "IR < [PC]";					
+				objMicOp[0][1] =  "2,14";
+				objMicOp[0][1] =  "";
 
-					objMicOp[1][0] = "";
-					objMicOp[1][1] = "PC ++";
-					objMicOp[1][2] = "";
-					objMicOp[1][3] = "";
+				objMicOp[1][0] = "";
+				objMicOp[1][1] = "PC ++";
+				objMicOp[1][2] = "";
+				objMicOp[1][3] = "";
 
-					objMicOp[2][0] = "T2: ";
-					objMicOp[2][1] = "ULA < AX";
-					objMicOp[2][2] = "7!,20";
-					objMicOp[2][3] = "";
-					
-					objMicOp[3][0] = "T3: ";
-					objMicOp[3][1] =  "x < portaParametroConstante";
-					objMicOp[3][2] =   "";
-					objMicOp[3][3] =   "";
-					
-					objMicOp[4][0] = "T4: ";
-					objMicOp[4][1] =  "AX < AC";
-					objMicOp[4][2] =   "6!, 21";
-					objMicOp[4][3] =    "";
+				objMicOp[2][0] = "T2: ";
+				objMicOp[2][1] = "ULA <"+ x1;
+				objMicOp[2][2] = x1Saida+",20";
+				objMicOp[2][3] = "";
 
-				}
+				objMicOp[3][0] = "T3: ";
+				objMicOp[3][1] =  "x < Magia";
+				objMicOp[3][2] =   "";
+				objMicOp[3][3] =   "";
+
+				objMicOp[4][0] = "T4: ";
+				objMicOp[4][1] =  x1+"< AC";
+				objMicOp[4][2] =  x1Entrada+", 21";
+				objMicOp[4][3] =  "";
+
+			}
 //				ADD [123], 2  /Registradores1
-				if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
+			if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
 //					{"IR < [PC]","2,14"}
 //					PC ++
 //					MAR < IR
@@ -436,120 +448,116 @@ public class CmdAssembly {
 //					"MAR < IR ", "3,17"// Mar recebeu o endereço
 //					"MBR < AC", "4, 21" // Recebeu a soma
 //					MBR < [MAR], "22, 23, 24, 25, 26"
-					objMicOp[0][0] = "T1: ";
-					objMicOp[0][1] =  "IR < [PC]";
-					objMicOp[0][1] =  "2,14";
-					objMicOp[0][1] =  "";
+				objMicOp[0][0] = "T1: ";
+				objMicOp[0][1] =  "IR < [PC]";
+				objMicOp[0][2] =  "2,14";
+				objMicOp[0][3] =  "";
 
-					objMicOp[1][0] = "";
-					objMicOp[1][1] =  "PC ++";
-					objMicOp[1][2] =  "";
-					objMicOp[1][3] =  "";
+				objMicOp[1][0] = "";
+				objMicOp[1][1] =  "PC ++";
+				objMicOp[1][2] =  "";
+				objMicOp[1][3] =  "";
 
-					objMicOp[2][0] = "T2: ";
-					objMicOp[2][1] = "MAR < IR";
-					objMicOp[2][2] = "";
-					objMicOp[2][3] = "";
+				objMicOp[2][0] = "T2: ";
+				objMicOp[2][1] = "MAR < IR";
+				objMicOp[2][2] = "";
+				objMicOp[2][3] = "";
 
-					objMicOp[3][0] = "T3: ";
-					objMicOp[3][1] = "MBR < [Mar]";
-					objMicOp[3][2] = "22,23,24,25,26";
-					objMicOp[3][3] =  ""},;
+				objMicOp[3][0] = "T3: ";
+				objMicOp[3][1] = "MBR < [Mar]";
+				objMicOp[3][2] = "22,23,24,25,26";
+				objMicOp[3][3] =  "";
 
-					objMicOp[4][0] = "T4: ";
-					objMicOp[4][1] = "ULA  < MBR";
-					objMicOp[4][2] = "4,20";
-					objMicOp[4][3] =  "";
+				objMicOp[4][0] = "T4: ";
+				objMicOp[4][1] = "ULA  < MBR";
+				objMicOp[4][2] = "4,20";
+				objMicOp[4][3] =  "";
 
-					objMicOp[5][0] = "T5: ";
-					objMicOp[5][1] = "x < portaParametroConstante";
-					objMicOp[5][2] = "19";
-					objMicOp[5][3] = "";
+				objMicOp[5][0] = "T5: ";
+				objMicOp[5][1] = "x < Magia";
+				objMicOp[5][2] = "19";
+				objMicOp[5][3] = "";
 
-					objMicOp[6][0] = "T6: ";
-					objMicOp[6][1] = "AC < ULA";
-					objMicOp[6][2] = "";
-					objMicOp[6][3] = "";
+				objMicOp[6][0] = "T6: ";
+				objMicOp[6][1] = "AC < ULA";
+				objMicOp[6][2] = "";
+				objMicOp[6][3] = "";
 
-					objMicOp[7][0] = "T7: ";
-					objMicOp[7][1] = "MAR < IR";
-					objMicOp[7][2] = "3,17";
-					objMicOp[7][3] =  "";
+				objMicOp[7][0] = "T7: ";
+				objMicOp[7][1] = "MAR < IR";
+				objMicOp[7][2] = "3,17";
+				objMicOp[7][3] =  "";
 
-					objMicOp[8][0] = "T8: ";
-					objMicOp[8][1] = "MBR < AC";
-					objMicOp[8][2] =  "4,21";
-					objMicOp[8][3] =   "";
+				objMicOp[8][0] = "T8: ";
+				objMicOp[8][1] = "MBR < AC";
+				objMicOp[8][2] =  "4,21";
+				objMicOp[8][3] =   "";
 
-					objMicOp[9][0] = "T9: ";
-					objMicOp[9][1] = "MBR < [MAR]";
-					objMicOp[9][2] =  "22,23,24,25,26";
-					objMicOp[9][3] =   "";
-
-
-				}				
+				objMicOp[9][0] = "T9: ";
+				objMicOp[9][1] = "MBR < [MAR]";
+				objMicOp[9][2] =  "22,23,24,25,26";
+				objMicOp[9][3] =   "";
 
 
-				break;
-				case "SUB":
-				resultado = subFunction(v1,v2);
+			}				
 
-				if(memoryX1){
-					updateMemoria(tabela, resultado, x1);
-				}else if(registrador1){
-					if (x1.equals("AX")){
-						AX = resultado;
-					}
-					if (x1.equals("BX")){
-						BX = resultado;
-					}
-					if (x1.equals("CX")){
-						CX = resultado;
-					}
-					if (x1.equals("DX")){
-						DX = resultado;
-					}
+			break;
+
+
+			case "SUB":
+			resultado = subFunction(v1,v2);
+
+			if(memoryX1){
+				updateMemoria(tabela, resultado, x1);
+			}else if(registrador1){
+				if (x1.equals("AX")){
+					AX = resultado;
 				}
+				if (x1.equals("BX")){
+					BX = resultado;
+				}
+				if (x1.equals("CX")){
+					CX = resultado;
+				}
+				if (x1.equals("DX")){
+					DX = resultado;
+				}
+			}
 
 				//ADD BX, AX /Registradores
-				if (!memoryX1 && !memoryX2 && registrador1 && registrador2){
+			if (!memoryX1 && !memoryX2 && registrador1 && registrador2){
 //					{"IR < [PC]","2,14"}
-//					PC ++ "????"
+//					PC ++
 //					"X < BX", "9!, 19"
 //					"ULA < AX", "7!,20" 
 //					"BX < AC",  "8!, 21"
-					objMicOp = {{"T1: ", "IR < [PC]", "2,14", ""},
-					{"", "PC++", "", ""},
-					{"T2: ", "X < BX", "9!,19", ""},
-					{"T3: ", "ULA < AX", "7!,20", ""},
-					{"T4: ", "BX < AC", "8!,21", ""}
 
 
 
-					objMicOp[0][0] = "T1: ";
-					objMicOp[0][1] =  "IR < [PC]";
-					objMicOp[0][2] = "2,14";
-					objMicOp[0][3] = "";
+				objMicOp[0][0] = "T1: ";
+				objMicOp[0][1] =  "IR < [PC]";
+				objMicOp[0][2] = "2,14";
+				objMicOp[0][3] = "";
 
-					objMicOp[1][0] = "T1: ";
-					objMicOp[1][1] =  "IR < [PC]";
-					objMicOp[1][2] =  "2,14";
-					objMicOp[1][3] =  "";
+				objMicOp[1][0] = "T1: ";
+				objMicOp[1][1] =  "IR < [PC]";
+				objMicOp[1][2] =  "2,14";
+				objMicOp[1][3] =  "";
 
-					objMicOp[2][0] = "T2: ";
-					objMicOp[2][1] =  "X < BX";
-					objMicOp[2][2] =  "9!,19";
-					objMicOp[2][3] =  "";
+				objMicOp[2][0] = "T2: ";
+				objMicOp[2][1] =  "X < "+ x1;
+				objMicOp[2][2] =  x1Entrada +",19";
+				objMicOp[2][3] =  "";
 
-					objMicOp[3][0] = "T3: ";
-					objMicOp[3][1] =  "ULA < AX";					
-					objMicOp[3][2] =  "7!,20";
-					objMicOp[3][3] =  "";
+				objMicOp[3][0] = "T3: ";
+				objMicOp[3][1] =  "ULA <" + x2 ;					
+				objMicOp[3][2] =  x2Saida +",20";
+				objMicOp[3][3] =  "";
 
-					objMicOp[4][0] = "T4: ";
-					objMicOp[4][1] =  "BX < AC"
-					objMicOp[4][2] =  "8!, 21";
-					objMicOp[4][3] =  "";
+				objMicOp[4][0] = "T4: ";
+				objMicOp[4][1] =  x1 +"< AC";
+				objMicOp[4][2] =  x1Entrada + ",21";
+				objMicOp[4][3] =  "";
 
 
 
@@ -557,12 +565,12 @@ public class CmdAssembly {
 
 
 
-				};
+
 			}
 //				ADD [123], AX Registradores + memoryX1
 			if (memoryX1 && !memoryX2 && !registrador1 && registrador2){
 //					{"IR < [PC]","2,14"}
-//					PC ++ "????"
+//					PC ++
 //					MAR < IR
 //					"MBR < [MAR]", "22, 23, 24, 25, 26"
 //					X  < MBR. "4,17"
@@ -570,152 +578,142 @@ public class CmdAssembly {
 //					"MBR < AC", "4, 20"
 //					"MBR < [MAR]". "22, 23, 24, 25, 26"
 
-				bjMicOp[0][0] = "T1: ";
-				bjMicOp[0][1] = "IR < [PC]";
-				bjMicOp[0][2] = "2,14";
-				bjMicOp[0][3] = "";
+				objMicOp[0][0] = "T1: ";
+				objMicOp[0][1] = "IR < [PC]";
+				objMicOp[0][2] = "2,14";
+				objMicOp[0][3] = "";
 
-				bjMicOp[1][0] = "";
-				bjMicOp[1][1] = "PC++";
-				bjMicOp[1][2] = "";
-				bjMicOp[1][3] = "";
+				objMicOp[1][0] = "";
+				objMicOp[1][1] = "PC++";
+				objMicOp[1][2] = "";
+				objMicOp[1][3] = "";
 
-				bjMicOp[2][0] = "T2: ", "MAR < IR", "", "";
-				bjMicOp[2][1] = "MAR < IR";
-				bjMicOp[2][2] = "";
-				bjMicOp[2][3] = "";
+				objMicOp[2][0] = "T2: ";
+				objMicOp[2][1] = "MAR < IR";
+				objMicOp[2][2] = "";
+				objMicOp[2][3] = "";
 
-				bjMicOp[3][0] = "T3: ", "MBR < [MAR]";
-				bjMicOp[3][1] = "MBR < [MAR]";
-				bjMicOp[3][2] = "22,23,24,25,26";
-				bjMicOp[3][3] = "";
+				objMicOp[3][0] = "T3: ";
+				objMicOp[3][1] = "MBR < [MAR]";
+				objMicOp[3][2] = "22,23,24,25,26";
+				objMicOp[3][3] = "";
 
-				bjMicOp[4][0] = "T4: ";
-				bjMicOp[4][1] = "X  < MBR";
-				bjMicOp[4][2] = "4,17";
-				bjMicOp[4][3] = "";
-
-
-				bjMicOp[5][0] = "T5:";
-				bjMicOp[5][1] = "ULA < AX";
-				bjMicOp[5][2] = "7!,20";
-				bjMicOp[5][3] = "";
-
-				bjMicOp[6][0] = "T6: ";
-				bjMicOp[6][1] = "MBR < AC";
-				bjMicOp[6][2] = "4,20";
-				bjMicOp[6][3] = "";
-
-				bjMicOp[7][0] = "T7: ";
-				bjMicOp[7][1] = "MBR < [MAR]";
-				bjMicOp[7][2] = "22,23,24,25,26";
-				bjMicOp[7][3] = "";
+				objMicOp[4][0] = "T4: ";
+				objMicOp[4][1] = "X  < MBR";
+				objMicOp[4][2] = "4,17";
+				objMicOp[4][3] = "";
 
 
+				objMicOp[5][0] = "T5:";
+				objMicOp[5][1] = "ULA <" + x2;
+				objMicOp[5][2] = x2Saida + ",20";
+				objMicOp[5][3] = "";
 
-			};			
+				objMicOp[6][0] = "T6: ";
+				objMicOp[6][1] = "MBR < AC";
+				objMicOp[6][2] = "4,20";
+				objMicOp[6][3] = "";
+
+				objMicOp[7][0] = "T7: ";
+				objMicOp[7][1] = "MBR < [MAR]";
+				objMicOp[7][2] = "22,23,24,25,26";
+				objMicOp[7][3] = "";
+
+
+
+
 //					
-		}
+			}
 //				ADD AX, [123] Registradores + memoryX2
-		if (!memoryX1 && memoryX2 && registrador1 && !registrador2)
+			if (!memoryX1 && memoryX2 && registrador1 && !registrador2){
 //					{"IR < [PC]","2,14"}
-//					PC ++ "????"
+//					PC ++
 //					MAR < IR
 //					"MBR < [MAR]", "22, 23, 24, 25, 26"
 //					ULA  < MBR. "4,20"
 //					"X < AX", "7!, 19"
 //					"AX < AC", "6!,21"
-			{"T1: ", "IR < [PC]", "2,14", ""},
-		
-		
-		{"T3: ", "MBR < [MAR]", "22,23,24,25,26", ""},
 
-		{"T4: ", "ULA  < MBR", "4,20", ""},
-		{"T5: ", "ULA < AX", "7!,20", ""},
-		{"T6: ", "X < AX", "7!,19", ""},
-		{"T7: ", "AX < AC", "6!,21", ""}
+				objMicOp[0][0] = "T1: ";
+				objMicOp[0][1] = "IR < [PC]";
+				objMicOp[0][2] = "2,14";
+				objMicOp[0][3] = "";
 
-		bjMicOp[0][0] = "T1: ";
-		bjMicOp[0][1] = "IR < [PC]";
-		bjMicOp[0][2] = "2,14";
-		bjMicOp[0][3] = "";
+				objMicOp[1][0] = "";
+				objMicOp[1][1] = "PC++";
+				objMicOp[1][2] = "";
+				objMicOp[1][3] = "";
 
-		bjMicOp[1][0] = "";
-		bjMicOp[1][1] = "PC++";
-		bjMicOp[1][2] = "";
-		bjMicOp[1][3] = "";
+				objMicOp[2][0] = "T2: ";
+				objMicOp[2][1] = "MAR < IR";
+				objMicOp[2][2] =   "";
+				objMicOp[2][3] =  "";
 
-		bjMicOp[2][0] = "T2: ";
-		bjMicOp[2][1] = "MAR < IR";
-		bjMicOp[2][2] =   "";
-		bjMicOp[2][3] =  "";
+				objMicOp[3][0] = "T3: ";
+				objMicOp[3][1] = "MBR < [MAR]";
+				objMicOp[3][2] = "22,23,24,25,26";
+				objMicOp[3][3] = "";
 
-		bjMicOp[3][0] = "T3: ";
-		bjMicOp[3][1] = "MBR < [MAR]";
-		bjMicOp[3][2] = "22,23,24,25,26";
-		bjMicOp[3][3] = "";
+				objMicOp[4][0] = "T4: ";
+				objMicOp[4][1] = "ULA  < MBR";
+				objMicOp[4][2] = "4,20";
+				objMicOp[4][3] = "";
 
-		bjMicOp[4][0] = "T4: ";
-		bjMicOp[4][1] = "ULA  < MBR";
-		bjMicOp[4][2] = "4,20";
-		bjMicOp[4][3] = "";
+				objMicOp[5][0] = "T5: ";
+				objMicOp[5][1] = "ULA < "+x1;
+				objMicOp[5][2] = x1Saida +",20";
+				objMicOp[5][3] = "";
 
-		bjMicOp[5][0] = "T5: ";
-		bjMicOp[5][1] = "ULA < AX";
-		bjMicOp[5][2] = "7!,20";
-		bjMicOp[5][3] = "";
+				objMicOp[6][0] = "T6: ";
+				objMicOp[6][1] = "X <" + x1;
+				objMicOp[6][2] = x1Saida + ",19";
+				objMicOp[6][3] = "";
 
-		bjMicOp[6][0] = "T6: ";
-		bjMicOp[6][1] = "X < AX";
-		bjMicOp[6][2] = "7!,19";
-		bjMicOp[6][3] = "";
+				objMicOp[7][0] = "T7: ";
+				objMicOp[7][1] = x1 + " < AC";
+				objMicOp[7][2] = x1Entrada + ",21";
+				objMicOp[7][3] = "";
 
-		bjMicOp[7][0] = "T7: ";
-		bjMicOp[7][1] = "AX < AC";
-		bjMicOp[7][2] = "6!,21";
-		bjMicOp[7][3] = "";
-	};	
-//					
 
-}
+			}
 //				ADD AX, 2  /memoryX1
-if (!memoryX1 && !memoryX2 && registrador1 && !registrador2){
+			if (!memoryX1 && !memoryX2 && registrador1 && !registrador2){
 //					{"IR < [PC]","2,14"}
-//					PC ++ "????"
+//					PC ++
 //					"ULA < AX", "7!,20"
 //					"x < Dá onde vem o dois?", 
 //					"AX < AC", "6!, 21"
 
 
-	objMicOp[0][0] = "T1: "; 
-	objMicOp[0][1] = "IR < [PC]";					
-	objMicOp[0][1] =  "2,14";
-	objMicOp[0][1] =  "";
+				objMicOp[0][0] = "T1: "; 
+				objMicOp[0][1] = "IR < [PC]";					
+				objMicOp[0][1] =  "2,14";
+				objMicOp[0][1] =  "";
 
-	objMicOp[1][0] = "";
-	objMicOp[1][1] = "PC ++";
-	objMicOp[1][2] = "";
-	objMicOp[1][3] = "";
+				objMicOp[1][0] = "";
+				objMicOp[1][1] = "PC ++";
+				objMicOp[1][2] = "";
+				objMicOp[1][3] = "";
 
-	objMicOp[2][0] = "T2: ";
-	objMicOp[2][1] = "ULA < AX";
-	objMicOp[2][2] = "7!,20";
-	objMicOp[2][3] = "";
-	
-	objMicOp[3][0] = "T3: ";
-	objMicOp[3][1] =  "x < portaParametroConstante";
-	objMicOp[3][2] =   "";
-	objMicOp[3][3] =   "";
-	
-	objMicOp[4][0] = "T4: ";
-	objMicOp[4][1] =  "AX < AC";
-	objMicOp[4][2] =   "6!, 21";
-	objMicOp[4][3] =    "";
+				objMicOp[2][0] = "T2: ";
+				objMicOp[2][1] = "ULA <"+ x1;
+				objMicOp[2][2] = x1Saida + ",20";
+				objMicOp[2][3] = "";
+
+				objMicOp[3][0] = "T3: ";
+				objMicOp[3][1] =  "x < Magia";
+				objMicOp[3][2] =   "";
+				objMicOp[3][3] =   "";
+
+				objMicOp[4][0] = "T4: ";
+				objMicOp[4][1] =  x1 + "< AC";
+				objMicOp[4][2] =   x1Entrada + ",21";
+				objMicOp[4][3] =    "";
 
 
-}
+			}
 //				ADD [123], 2  /Registradores1
-if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
+			if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
 //					{"IR < [PC]","2,14"}
 //					PC ++
 //					MAR < IR
@@ -728,88 +726,128 @@ if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
 //					MBR < [MAR], "22, 23, 24, 25, 26"
 
 
-	objMicOp[0][0] = "T1: ";
-	objMicOp[0][1] =  "IR < [PC]";
-	objMicOp[0][1] =  "2,14";
-	objMicOp[0][1] =  "";
+				objMicOp[0][0] = "T1: ";
+				objMicOp[0][1] =  "IR < [PC]";
+				objMicOp[0][1] =  "2,14";
+				objMicOp[0][1] =  "";
 
-	objMicOp[1][0] = "";
-	objMicOp[1][1] =  "PC ++";
-	objMicOp[1][2] =  "";
-	objMicOp[1][3] =  "";
+				objMicOp[1][0] = "";
+				objMicOp[1][1] =  "PC ++";
+				objMicOp[1][2] =  "";
+				objMicOp[1][3] =  "";
 
-	objMicOp[2][0] = "T2: ";
-	objMicOp[2][1] = "MBR < [Mar]";
-	objMicOp[2][2] = "22,23,24,25,26";
-	objMicOp[2][3] =  ""},;
+				objMicOp[2][0] = "T2: ";
+				objMicOp[2][1] = "MBR < [Mar]";
+				objMicOp[2][2] = "22,23,24,25,26";
+				objMicOp[2][3] =  "";
 
-	objMicOp[3][0] = "T3: ";
-	objMicOp[3][1] = "ULA  < MBR";
-	objMicOp[3][2] = "4,20";
-	objMicOp[3][3] =  "";
+				objMicOp[3][0] = "T3: ";
+				objMicOp[3][1] = "ULA  < MBR";
+				objMicOp[3][2] = "4,20";
+				objMicOp[3][3] =  "";
 
-	objMicOp[4][0] = "T4: ";
-	objMicOp[4][1] = "x < portaParametroConstante";
-	objMicOp[4][2] = "19";
-	objMicOp[4][3] = "";
+				objMicOp[4][0] = "T4: ";
+				objMicOp[4][1] = "x < Magia";
+				objMicOp[4][2] = "19";
+				objMicOp[4][3] = "";
 
-	objMicOp[5][0] = "T5: ";
-	objMicOp[5][1] = "AC < ULA";
-	objMicOp[5][2] = "";
-	objMicOp[5][3] = "";
+				objMicOp[5][0] = "T5: ";
+				objMicOp[5][1] = "AC < ULA";
+				objMicOp[5][2] = "";
+				objMicOp[5][3] = "";
 
-	objMicOp[6][0] = "T6: ";
-	objMicOp[6][1] = "MAR < IR";
-	objMicOp[6][2] = "3,17";
-	objMicOp[6][3] =  "";
+				objMicOp[6][0] = "T6: ";
+				objMicOp[6][1] = "MAR < IR";
+				objMicOp[6][2] = "3,17";
+				objMicOp[6][3] =  "";
 
-	objMicOp[7][0] = "T7: ";
-	objMicOp[7][1] = "MBR < AC";
-	objMicOp[7][2] =  "4,21";
-	objMicOp[7][3] =   "";
+				objMicOp[7][0] = "T7: ";
+				objMicOp[7][1] = "MBR < AC";
+				objMicOp[7][2] =  "4,21";
+				objMicOp[7][3] =   "";
 
-	objMicOp[8][0] = "T8: ";
-	objMicOp[8][1] = "MBR < [MAR]";
-	objMicOp[8][2] =  "22,23,24,25,26";
-	objMicOp[8][3] =   "";
-}				
+				objMicOp[8][0] = "T8: ";
+				objMicOp[8][1] = "MBR < [MAR]";
+				objMicOp[8][2] =  "22,23,24,25,26";
+				objMicOp[8][3] =   "";
+			}				
 
 
-break;
-case "MUL":
-int auxMul = toDec(AX);
-AX = toHex(auxMul *= v1);
+			break;
+			case "MUL":
+			int auxMul = toDec(AX);
+			AX = toHex(auxMul *= v1);
 
 //				MUL 3
-if (!memoryX1 && !memoryX2 && !registrador1 && !registrador2){
+			if (!memoryX1 && !memoryX2 && !registrador1 && !registrador2){
 //					{"IR < [PC]","2,14"}
 //					PC ++
 //					"X < MAGIA", "MAGIA, 19"
 //					"ULA < AX", "7, 20"
 //					"AX<AC", "6,21"
-	objMicOp = {{"T1: ", "IR < [PC]", "2,14", ""},
-	{"", "PC++", "", ""},
-								{"T2: ", "X < MAGIA", "19", ""},// MAGIA ??
-								{"T3: ", "ULA < AX", "7,20", ""},
-								{"T4: ", "AX < AC", "6,21", ""}
-							};
-						}
+				objMicOp[0][0] = "T1: ";
+				objMicOp[0][1] = "IR < [PC]";
+				objMicOp[0][2] = "2,14";
+				objMicOp[0][3] = "";
+
+				objMicOp[1][0] = "";
+				objMicOp[1][1] = "PC++";
+				objMicOp[1][2] = "";
+				objMicOp[1][3] = "";
+
+				objMicOp[2][0] = "T2: ";
+				objMicOp[2][1] = "X < MAGIA";
+				objMicOp[2][2] = "19";
+					objMicOp[2][3] = "";// Magia
+					
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "ULA < AX";
+					objMicOp[3][2] = "7,20";
+					objMicOp[3][3] = "";
+					
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = "AX < AC";
+					objMicOp[4][2] = "6,21";
+					objMicOp[4][3] = "";
+					
+				}
+
 //				MUL BX
-						if (!memoryX1 && !memoryX2 && registrador1 && !registrador2){
+				if (!memoryX1 && !memoryX2 && registrador1 && !registrador2){
 //					{"IR < [PC]","2,14"}
 //					PC ++
 //					"X < BX", "9!, 19"
 //					"ULA < AX", "7, 20"
 //					"AX<AC", "6,21"
-							objMicOp = {{"T1: ", "IR < [PC]", "2,14", ""},
-							{"", "PC++", "", ""},
-							{"T2: ", "X < BX", "9!,19", ""},
-							{"T3: ", "ULA < AX", "7,20", ""},
-							{"T4: ", "AX < AC", "6,21", ""}
-						};
-					}
+
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
+					
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+					
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "X < "+ x1;
+					objMicOp[2][2] = x1Saida + ",19";
+					objMicOp[2][3] = "";
+					
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "ULA < AX";
+					objMicOp[3][2] = "7,20";
+					objMicOp[3][3] = "";
+
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = "AX < AC";
+					objMicOp[4][2] = "6,21";
+					objMicOp[4][3] = "";
+				}
+
 //				MUL [1234]
-					if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
+				if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
 //					{"IR < [PC]","2,14"}
 //					PC ++
 //					"MAR < IR", "17, 3"
@@ -817,15 +855,41 @@ if (!memoryX1 && !memoryX2 && !registrador1 && !registrador2){
 //					X  < MBR. "5,19"
 //					"ULA < AX", "7, 20"
 //					"AX<AC", "6,21"
-						objMicOp = {{"T1: ", "IR < [PC]", "2,14", ""},
-						{"", "PC++", "", ""},
-						{"T2: ", "MAR < IR", "3,17", ""},
-						{"T3: ", "MBR < [Mar]", "22,23,24,25,26", ""},
-						{"T4: ", "X  < MBR", "5,19", ""},
-						{"T5: ", "ULA < AX", "7,20", ""},
-						{"T6: ", "AX < AC", "6,21", ""}
-					};
 					
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
+					
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+					
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "MAR < IR";
+					objMicOp[2][2] = "3,17";
+					objMicOp[2][3] = "";
+
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "MBR < [MAR]";
+					objMicOp[3][2] = "22,23,24,25,26";
+					objMicOp[3][3] = "";
+					
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = "X  < MBR";
+					objMicOp[4][2] = "5,19";
+					objMicOp[4][3] = "";
+					
+					objMicOp[5][0] = "T5: ";
+					objMicOp[5][1] = "ULA < AX";
+					objMicOp[5][2] = "7,20";
+					objMicOp[5][3] = "";
+
+					objMicOp[6][0] = "T6: ";
+					objMicOp[6][1] = "AX < AC";
+					objMicOp[6][2] = "6,21";
+					objMicOp[6][3] = "";
 				}
 				break;
 				case "DIV":
@@ -837,32 +901,78 @@ if (!memoryX1 && !memoryX2 && !registrador1 && !registrador2){
 //					"ULA < AX", "7, 20"
 //					"AX<AC", "6,21"
 //					+ Resto
-					objMicOp = {{"T1: ", "IR < [PC]", "2,14", ""},
-					{"", "PC++", "", ""},
-								{"T2: ", "X < MAGIA", "19", ""},// MAGIA ??
-								{"T3: ", "ULA < AX", "7,20", ""},
-								{"T4: ", "AX < AC", "6,21", ""},
-								{"T5: ", "DX < restoDivisao", "", ""}
-							};
-						}
+
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
+					
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+					
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "X < MAGIA";
+					objMicOp[2][2] = "19";
+					objMicOp[2][3] = "";// Magia
+					
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "ULA < AX";
+					objMicOp[3][2] = "7,20";
+					objMicOp[3][3] = "";
+					
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = "AX < AC";
+					objMicOp[4][2] = "6,21";
+					objMicOp[4][3] = "";
+					
+					objMicOp[5][0] = "T5: ";
+					objMicOp[5][1] = "DX < restoDivisao";
+					objMicOp[5][2] = "";
+					objMicOp[5][3] = "";
+				}
 //				DIV BX
-						if (!memoryX1 && !memoryX2 && registrador1 && !registrador2){
+				if (!memoryX1 && !memoryX2 && registrador1 && !registrador2){
 //					{"IR < [PC]","2,14"}
 //					PC ++
 //					"X < BX", "9!, 19"
 //					"ULA < AX", "7, 20"
 //					"AX<AC", "6,21"
 //					+ Resto
-							objMicOp = {{"T1: ", "IR < [PC]", "2,14", ""},
-							{"", "PC++", "", ""},
-							{"T2: ", "X < BX", "9!,19", ""},
-							{"T3: ", "ULA < AX", "7,20", ""},
-							{"T4: ", "AX < AC", "6,21", ""},
-							{"T5: ", "DX < restoDivisao", "", ""}
-						};
-					}
+
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
+					
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+					
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "X < "+ x1;
+					objMicOp[2][2] = x1Saida + ",19";
+					objMicOp[2][3] = "";
+					
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "ULA < AX";
+					objMicOp[3][2] = "7,20";
+					objMicOp[3][3] = "";
+
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = "AX < AC";
+					objMicOp[4][2] = "6,21";
+					objMicOp[4][3] = "";
+
+					objMicOp[5][0] = "";
+					objMicOp[5][1] = "T5: ";
+					objMicOp[5][2] = "DX < restoDivisao";
+					objMicOp[5][3] = "";
+				}
 //				DIV [1234]
-					if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
+				if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
 //					{"IR < [PC]","2,14"}
 //					PC ++
 //					"MAR < IR", "17, 3"
@@ -871,17 +981,47 @@ if (!memoryX1 && !memoryX2 && !registrador1 && !registrador2){
 //					"ULA < AX", "7, 20"
 //					"AX<AC", "6,21"
 					//+ Resto
-						objMicOp = {{"T1: ", "IR < [PC]", "2,14", ""},
-						{"", "PC++", "", ""},
-						{"T2: ", "MAR < IR", "3,17", ""},
-						{"T3: ", "MBR < [Mar]", "22,23,24,25,26", ""},
-						{"T4: ", "X  < MBR", "5,19", ""},
-						{"T5: ", "ULA < AX", "7,20", ""},
-						{"T6: ", "AX < AC", "6,21", ""}
-					};
+
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
 					
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+					
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "MAR < IR";
+					objMicOp[2][2] = "3,17";
+					objMicOp[2][3] = "";
+
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "MBR < [Mar]";
+					objMicOp[3][2] = "22,23,24,25,26";
+					objMicOp[3][3] = "";
+					
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = "X  < MBR";
+					objMicOp[4][2] = "5,19";
+					objMicOp[4][3] = "";
+					
+					objMicOp[5][0] = "T5: ";
+					objMicOp[5][1] = "ULA < AX";
+					objMicOp[5][2] = "7,20";
+					objMicOp[5][3] = "";
+
+					objMicOp[6][0] = "T6: ";
+					objMicOp[6][1] = "AX < AC";
+					objMicOp[6][2] = "6,21";
+					objMicOp[6][3] = "";
+
 				}
-				if (v1 == 0) throw new IllegalArgumentException("Nao pode divir por zero");
+				if (v1 == 0){
+					Alert_label.setText("Nao pode divir por zero");
+					throw new IllegalArgumentException("Nao pode divir por zero");
+				}
 				else {
 					AX = Integer.toString(toDec(DX));
 					int auxDiv = Integer.parseInt(AX);
@@ -916,14 +1056,30 @@ if (!memoryX1 && !memoryX2 && !registrador1 && !registrador2){
 //					PC ++
 //					"X < BX", "9!, 19"
 //					"BX<AC", "6,21"
-					objMicOp = {{"T1: ", "IR < [PC]", "2,14", ""},
-					{"", "PC++", "", ""},
-					{"T2: ", "X < BX", "9!,19", ""},
-					{"T3: ", "BX < AC", "6,21", ""}
-				};
-			}
+
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
+					
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+					
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "X <"+ x1;
+					objMicOp[2][2] = x1Saida + ",19";
+					objMicOp[2][3] = "";
+					
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = x1 + "< AC";
+					objMicOp[3][2] = x1Entrada + ",21";
+					objMicOp[3][3] = "";
+
+				}
 //				INC [1234]
-			if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
+				if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
 //					{"IR < [PC]","2,14"}
 //					PC ++
 //					"MAR < IR", "17, 3"
@@ -931,53 +1087,94 @@ if (!memoryX1 && !memoryX2 && !registrador1 && !registrador2){
 //					X  < MBR. "5,19"
 //					"MBR < AC", "4, 21" // Recebeu a soma
 //					MBR < [MAR], "22, 23, 24, 25, 26"
-				objMicOp = {{"T1: ", "IR < [PC]", "2,14", ""},
-				{"", "PC++", "", ""},
-				{"T2: ", "MAR < IR", "3,17", ""},
-				{"T3: ", "MBR < [Mar]", "22,23,24,25,26", ""},
-				{"T4: ", "X  < MBR", "5,19", ""},
-				{"T5: ", "MBR < AC", "4,21", ""},
-				{"T6: ", "MBR < [MAR]", "22,23,24,25,26", ""}
-			};
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
+					
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+					
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "MAR < IR";
+					objMicOp[2][2] = "3,17"; 
+					objMicOp[2][3] = "";
+					
+					objMicOp[3][0] = "T3:";
+					objMicOp[3][1] = "MBR < [Mar]";
+					objMicOp[3][2] = "22,23,24,25,26";
+					objMicOp[3][3] = "";
+					
 
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = "X  < MBR";
+					objMicOp[4][2] = "5,19";
+					objMicOp[4][3] = "";
+					
+					objMicOp[5][0] = "T5: ";
+					objMicOp[5][1] = "MBR < AC";
+					objMicOp[5][2] = "4,21";
+					objMicOp[5][3] = "";
+					
+					objMicOp[6][0] = "T6: ";
+					objMicOp[6][1] = "MBR < [MAR]";
+					objMicOp[6][2] = "22,23,24,25,26";
+					objMicOp[6][3] = "";
 
-		}
-
-		break;
-		case "DEC":
-		v1--;
-		resultado = toHex(v1);
-		if(memoryX1){
-			updateMemoria(tabela, resultado, x1);
-		}else if(registrador1){
-			if (x1.equals("AX")){
-				AX = resultado;
-			}
-			if (x1.equals("BX")){
-				BX = resultado;
-			}
-			if (x1.equals("CX")){
-				CX = resultado;
-			}
-			if (x1.equals("DX")){
-				DX = resultado;
-			}
-		}
-
+				}
+				
+				break;
+				case "DEC":
+				v1--;
+				resultado = toHex(v1);
+				if(memoryX1){
+					updateMemoria(tabela, resultado, x1);
+				}else if(registrador1){
+					if (x1.equals("AX")){
+						AX = resultado;
+					}
+					if (x1.equals("BX")){
+						BX = resultado;
+					}
+					if (x1.equals("CX")){
+						CX = resultado;
+					}
+					if (x1.equals("DX")){
+						DX = resultado;
+					}
+				}
 //				INC BX
-		if (!memoryX1 && !memoryX2 && registrador1 && !registrador2){
+				if (!memoryX1 && !memoryX2 && registrador1 && !registrador2){
 //					{"IR < [PC]","2,14"}
 //					PC ++
 //					"X < BX", "9!, 19"
 //					"BX<AC", "6,21"
-			objMicOp = {{"T1: ", "IR < [PC]", "2,14", ""},
-			{"", "PC++", "", ""},
-			{"T2: ", "X < BX", "9!,19", ""},
-			{"T3: ", "BX < AC", "6,21", ""}
-		};
-	}
+
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
+					
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+					
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "X <" +  x1;
+					objMicOp[2][2] = x1Saida + ",19";
+					objMicOp[2][3] = "";
+					
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = x1 + "< AC";
+					objMicOp[3][2] = x1Saida + ",21";
+					objMicOp[3][3] = "";
+
+				}
 //				INC [1234]
-	if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
+				if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
 //					{"IR < [PC]","2,14"}
 //					PC ++
 //					"MAR < IR", "17, 3"
@@ -985,109 +1182,230 @@ if (!memoryX1 && !memoryX2 && !registrador1 && !registrador2){
 //					X  < MBR. "5,19"
 //					"MBR < AC", "4, 21" // Recebeu a soma
 //					MBR < [MAR], "22, 23, 24, 25, 26"
-		objMicOp = {{"T1: ", "IR < [PC]", "2,14", ""},
-		{"", "PC++", "", ""},
-		{"T2: ", "MAR < IR", "3,17", ""},
-		{"T3: ", "MBR < [Mar]", "22,23,24,25,26", ""},
-		{"T4: ", "X  < MBR", "5,19"},
-		{"T5: ", "MBR < AC", "4,21"},
-		{"T6: ", "MBR < [MAR]", "22,23,24,25,26", ""}
-	};
-}
-
-
-break;
-case "CMP":
-int result = v1 - v2;
-
+					
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
+					
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+					
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "MAR < IR";
+					objMicOp[2][2] = "3,17"; 
+					objMicOp[2][3] = "";	
+					
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "MBR < [Mar]";
+					objMicOp[3][2] = "22,23,24,25,26";
+					objMicOp[3][3] = "";
+					
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = "X  < MBR";
+					objMicOp[4][2] = "5,19";
+					objMicOp[4][3] = "";
+					
+					objMicOp[5][0] = "T5: ";
+					objMicOp[5][1] = "MBR < AC";
+					objMicOp[5][2] = "4,21";
+					objMicOp[5][3] = "";
+					
+					objMicOp[6][0] = "T6: ";
+					objMicOp[6][1] = "MBR < [MAR]";
+					objMicOp[6][2] = "22,23,24,25,26";
+					objMicOp[6][3] = "";
+				}
+				
+				break;
+				case "CMP":
+				int result = v1 - v2;
+				
 				//Determinacao das flags
-if(result == 0) {
-	flagZero = 1;
-	Zero_label.setText("1");
-}else{
-	flagZero = 0;
-	Zero_label.setText("0");
-}
+				if(result == 0) {
+					flagZero = 1;
+					Zero_label.setText("1");
+				}else{
+					flagZero = 0;
+					Zero_label.setText("0");
+				}
 
-if(result < 0){
-	flagSinal = 1;
-	Sinal_label.setText("1");
-} 
-if(result >= 0){
-	flagSinal = 0;
-	Sinal_label.setText("0");
-} 
+				if(result < 0){
+					flagSinal = 1;
+					Sinal_label.setText("1");
+				} 
+				if(result >= 0){
+					flagSinal = 0;
+					Sinal_label.setText("0");
+				} 
 
 
 
 
 				//CMP BX, AX /Registradores
-if (!memoryX1 && !memoryX2 && registrador1 && registrador2){
+				if (!memoryX1 && !memoryX2 && registrador1 && registrador2){
 //					{"IR < [PC]","2,14"}
-//					PC ++ "????"
+//					PC ++
 //					"X < BX", "9!, 19"
 //					"ULA < AX", "7!,20" 
 //					"Feitiço < AC",  "Feitiço, 21"
-	objMicOp = {{"T1: ", "IR < [PC]", "2,14", ""},
-	{"", "PC++", "", ""},
-	{"T2: ", "X < BX", "9!,19", ""},
-	{"T3: ", "spell < AC", "21", ""}
-};
-}
+
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
+
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "X <" + x1;
+					objMicOp[2][2] = x1Saida+ ",19";
+					objMicOp[2][3] = "";
+
+					objMicOp[3][0] = 	"T3";
+					objMicOp[3][1] = 	"ULA <" + x2;
+					objMicOp[3][2] = x2Saida + ",20";
+					objMicOp[3][3] = "";
+
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = "spell < AC";
+					objMicOp[4][2] = "21";
+					objMicOp[4][3] = "";
+
+				}
 //				CMP [123], AX Registradores + memoryX1
-if (memoryX1 && !memoryX2 && !registrador1 && registrador2){
+				if (memoryX1 && !memoryX2 && !registrador1 && registrador2){
 //					{"IR < [PC]","2,14"}
-//					PC ++ "????"
+//					PC ++
 //					MAR < IR
 //					"MBR < [MAR]", "22, 23, 24, 25, 26"
 //					X  < MBR. "4,17"
-//					"Feitiço < AX", "Feitiço, 20"
-	objMicOp = {{"T1: ", "IR < [PC]", "2,14", ""},
-	{"", "PC++", "", ""},
-	{"T2: ", "MAR < IR", "", ""},
-	{"T3: ", "MBR < [MAR]", "22,23,24,25,26", ""},
-	{"T4: ", "X < MBR", "4,17", ""},
-	{"T5: ", "spell < AC", "20", ""}
-};
+
+//					"Feitiço < AC", "Feitiço, 20"
+
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
+
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "MAR < IR";
+					objMicOp[2][2] = "";
+					objMicOp[2][3] = "";
+
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "MBR < [MAR]";
+					objMicOp[3][2] = "22,23,24,25,26";
+					objMicOp[3][3] = "";
+
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = "X < MBR";
+					objMicOp[4][2] = "4,17";
+					objMicOp[4][3] = "";
+
+					objMicOp[5][0] = 	"T5";
+					objMicOp[5][1] = 	"ULA <" + x2;
+					objMicOp[5][2] = x2Saida + ",20";
+					objMicOp[5][3] = "";
+
+					objMicOp[6][0] = "T6: ";
+					objMicOp[6][1] = "spell < AC";
+					objMicOp[6][2] = "20";
+					objMicOp[6][3] = "";
 //						
 //					
-}
+				}
 //				CMP AX, [123] Registradores + memoryX2
-if (!memoryX1 && memoryX2 && registrador1 && !registrador2){
+				if (!memoryX1 && memoryX2 && registrador1 && !registrador2){
 //					{"IR < [PC]","2,14"}
-//					PC ++ "????"
+//					PC ++
 //					MAR < IR
 //					"MBR < [MAR]", "22, 23, 24, 25, 26"
 //					ULA  < MBR. "4,20"
 //					"X < AX", "7!, 19"
 //					"Feitiço < AC", "Feitiço!,21"
-	objMicOp = {{"T1: ", "IR < [PC]", "2,14", ""},
-	{"", "PC++", "", ""},
-	{"T2: ", "MAR < IR", "", ""},
-	{"T3: ", "MBR < [MAR]", "22,23,24,25,26", ""},
-	{"T4: ", "ULA < MBR", "4,20", ""},
-	{"T5: ", "X < AX", "7!,19", ""},
-	{"T6: ", "spell < AC", "21", ""}
-};
-//					
 
-}
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
+
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "MAR < IR";
+					objMicOp[2][2] = "";
+					objMicOp[2][3] = "";
+
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "MBR < [MAR]";
+					objMicOp[3][2] = "22,23,24,25,26";
+					objMicOp[3][3] = "";
+
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = "ULA < MBR";
+					objMicOp[4][2] = "4,20";
+					objMicOp[4][3] = "";
+
+					objMicOp[5][0] = "T5: ";
+					objMicOp[5][1] = "X <" + x1;
+					objMicOp[5][2] = x1Saida + ",19";
+					objMicOp[5][3] = "";
+
+					objMicOp[4][0] = "T6: ";
+					objMicOp[4][1] = "spell < AC";
+					objMicOp[4][2] = "21";
+					objMicOp[4][3] = "";
+					
+				}
 //				CMP AX, 2  /memoryX1
-if (!memoryX1 && !memoryX2 && registrador1 && !registrador2){
+				if (!memoryX1 && !memoryX2 && registrador1 && !registrador2){
 //					{"IR < [PC]","2,14"}
-//					PC ++ "????"
+//					PC ++
 //					"ULA < AX", "7!,20"
 //					"x < Dá onde vem o dois?", 
 //					"Feitiço < AC", "Feitiço!, 21"
-	objMicOp = {{"T1: ", "IR < [PC]", "2,14", ""},
-	{"", "PC++", "", ""},
-	{"T2: ", "ULA < AX", "7!,20", ""},
-	{"T3: ", "X < portaParametroConstante", "19", ""},
-	{"T4: ", "spell < AC", "21", ""}
-};
-}
+
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
+
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "ULA <"+ x1;
+					objMicOp[2][2] = x1Saida+",20";
+					objMicOp[2][3] = "";
+
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "X < Magia";
+					objMicOp[3][2] = "19";
+					objMicOp[3][3] = "";
+
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = "spell < AC";
+					objMicOp[4][2] = "21";
+					objMicOp[4][3] = "";
+				}
 //				CMP [123], 2  /Registradores1
-if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
+				if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
 //					{"IR < [PC]","2,14"}
 //					PC ++
 //					MAR < IR
@@ -1096,169 +1414,413 @@ if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
 //					"x < Dá onde vem o dois?", "19" 
 //					 "AC < ULA", "Porta dedicada" 
 //					"Feitiço < AC", "Feitiço!, 21"
-	objMicOp = {{"T1: ", "IR < [PC]", "2,14", ""},
-	{"", "PC++", "", ""},
-	{"T2: ", "MAR < IR", "", ""},
-	{"T3: ", "MBR < [MAR]", "22,23,24,25,26", ""},
-	{"T4: ", "ULA < MBR", "4,20", ""},
-	{"T5: ", "X < portaParametroConstante", "19", ""},
-	{"T6: ", "AC < ULA", "", ""},
-	{"T6: ", "spell < AC", "21", ""}
-};
-}				
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
 
-break;
-case "JMP":
-assemblyScreen.setJump(true);
-assemblyScreen.setLineNeedUp(v1);
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "MAR < IR";
+					objMicOp[2][2] = "";
+					objMicOp[2][3] = "";
+
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "MBR < [MAR]";
+					objMicOp[3][2] = "22,23,24,25,26";
+					objMicOp[3][3] = "";
+
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = "ULA < MBR";
+					objMicOp[4][2] = "4,20";
+					objMicOp[4][3] = "";
+
+					objMicOp[5][0] = "T5: ";
+					objMicOp[5][1] = "X < Magia";
+					objMicOp[5][2] = "19";
+					objMicOp[5][3] = "";
+
+					objMicOp[6][0] = "T6: ";
+					objMicOp[6][1] = "AC < ULA";
+					objMicOp[6][2] = "";
+					objMicOp[6][3] = "";
+
+					objMicOp[4][0] = "T7: ";
+					objMicOp[4][1] = "spell < AC";
+					objMicOp[4][2] = "21";
+					objMicOp[4][3] = "";
+				}				
+
+				break;
+				case "JMP":
+				assemblyScreen.setJump(true);
+				assemblyScreen.setLineNeedUp(v1);
 //				JMP N //Número da LINHA, já que utilizamos apenas os números da linha, não temos a TAG com a referência na memória para esse ponto do programa. Utilizaremos essa simplificação para mostrar a atualização de PC.
 //				MAR < N
 //				"MBR < [Mar]", "22, 23, 24, 25, 26"}
 //				PC < [MBR]
-objMicOp = {{"T1: ", "MAR < N !!!JMP N //Número da LINHA, já que utilizamos apenas os números da linha, não temos a TAG com a referência na memória para esse ponto do programa. Utilizaremos essa simplificação para mostrar a atualização de PC.!!!", "", ""},
-{"", "PC++", "", ""},
-{"T2: ", "MBR < [MAR]", "22,23,24,25,26", ""},
-{"T3: ", "PC < [MBR]", "", ""}
-};
-break;
-case "JZ":
-if(flagZero == null) throw new IllegalArgumentException("CMP NAO FOI EXECUTADO");
-if(flagZero == 1) {
-	assemblyScreen.setJump(true);
-	assemblyScreen.setLineNeedUp(v1);
-};
-break;
-case "JNZ":
-if(flagZero == null) throw new IllegalArgumentException("CMP NAO FOI EXECUTADO");
-if(flagZero == 0){
-	assemblyScreen.setJump(true);
-	assemblyScreen.setLineNeedUp(v1);
-}
-break;
-case "JL":
-if(flagSinal == null) throw new IllegalArgumentException("CMP NAO FOI EXECUTADO");
-if(flagSinal == 1) {
-	assemblyScreen.setJump(true);
-	assemblyScreen.setLineNeedUp(v1);
-} 
-break;
-case "JG":
-if(flagSinal == null) throw new IllegalArgumentException("CMP NAO FOI EXECUTADO");
-if(flagSinal == 0) {
-	assemblyScreen.setJump(true);
-	assemblyScreen.setLineNeedUp(v1);
-} 
-break;
-case "JLE":
-if(flagSinal == null) throw new IllegalArgumentException("CMP NAO FOI EXECUTADO");
-if((flagSinal == 1) || (flagSinal == 1 && flagZero == 1)) {
-	assemblyScreen.setJump(true);
-	assemblyScreen.setLineNeedUp(v1);
-};
-break;
-case "JGE":
-if(flagZero == null) throw new IllegalArgumentException("CMP NAO FOI EXECUTADO");
-if((flagSinal == 0) || (flagSinal == 0 && flagZero == 1)){
-	assemblyScreen.setJump(true);
-	assemblyScreen.setLineNeedUp(v1);
-};
-break;
-case "MOV":
-resultado = toHex(v2);
-if(memoryX1){
-	updateMemoria(tabela, resultado, x1);
-}else if(registrador1){
-	if (x1.equals("AX")){
-		AX = resultado;
-	}
-	if (x1.equals("BX")){
-		BX = resultado;
-	}
-	if (x1.equals("CX")){
-		CX = resultado;
-	}
-	if (x1.equals("DX")){
-		DX = resultado;
-	}
-}
+
+				//Todos os Jumps são iguais JZ.
+				objMicOp[0][0] = "T1: ";
+				objMicOp[0][1] = "MAR < N !!!JMP N //Número da LINHA, já que utilizamos apenas os números da linha, não temos a TAG com a referência na memória para esse ponto do programa. Utilizaremos essa simplificação para mostrar a atualização de PC.!!!";
+				objMicOp[0][2] = "";
+				objMicOp[0][3] = "";
+
+				objMicOp[1][0] = "";
+				objMicOp[1][1] = "PC++";
+				objMicOp[1][2] = "";
+				objMicOp[1][3] = "";
+
+				objMicOp[2][0] = "T2: ";
+				objMicOp[2][1] = "MBR < [MAR]";
+				objMicOp[2][2] = "22,23,24,25,26";
+				objMicOp[2][3] = "";
+
+				objMicOp[3][0] = "T3: ";
+				objMicOp[3][1] = "PC < [MBR]";
+				objMicOp[3][2] = "";
+				objMicOp[3][3] = "";
 
 
+				break;
+				case "JZ":
+				if(flagZero == null) {
+					Alert_label.setText("CMP NAO FOI EXECUTADO");
+					throw new IllegalArgumentException("CMP NAO FOI EXECUTADO");
+				}
+				if(flagZero == 1) {
+					assemblyScreen.setJump(true);
+					assemblyScreen.setLineNeedUp(v1);
+				};
+
+				objMicOp[0][0] = "T1: ";
+				objMicOp[0][1] = "MAR < N !!!JMP N //Número da LINHA, já que utilizamos apenas os números da linha, não temos a TAG com a referência na memória para esse ponto do programa. Utilizaremos essa simplificação para mostrar a atualização de PC.!!!";
+				objMicOp[0][2] = "";
+				objMicOp[0][3] = "";
+
+				objMicOp[1][0] = "";
+				objMicOp[1][1] = "PC++";
+				objMicOp[1][2] = "";
+				objMicOp[1][3] = "";
+
+				objMicOp[2][0] = "T2: ";
+				objMicOp[2][1] = "MBR < [MAR]";
+				objMicOp[2][2] = "22,23,24,25,26";
+				objMicOp[2][3] = "";
+
+				objMicOp[3][0] = "T3: ";
+				objMicOp[3][1] = "PC < [MBR]";
+				objMicOp[3][2] = "";
+				objMicOp[3][3] = "";
+				break;
+				case "JNZ":
+				if(flagZero == null){
+					Alert_label.setText("CMP NAO FOI EXECUTADO");
+					throw new IllegalArgumentException("CMP NAO FOI EXECUTADO");
+				}
+				if(flagZero == 0){
+					assemblyScreen.setJump(true);
+					assemblyScreen.setLineNeedUp(v1);
+				}
+				break;
+				case "JL":
+				if(flagSinal == null){
+					Alert_label.setText("CMP NAO FOI EXECUTADO");
+					throw new IllegalArgumentException("CMP NAO FOI EXECUTADO");
+				}
+				if(flagSinal == 1) {
+					assemblyScreen.setJump(true);
+					assemblyScreen.setLineNeedUp(v1);
+				} 
+
+				objMicOp[0][0] = "T1: ";
+				objMicOp[0][1] = "MAR < N !!!JMP N //Número da LINHA, já que utilizamos apenas os números da linha, não temos a TAG com a referência na memória para esse ponto do programa. Utilizaremos essa simplificação para mostrar a atualização de PC.!!!";
+				objMicOp[0][2] = "";
+				objMicOp[0][3] = "";
+
+				objMicOp[1][0] = "";
+				objMicOp[1][1] = "PC++";
+				objMicOp[1][2] = "";
+				objMicOp[1][3] = "";
+
+				objMicOp[2][0] = "T2: ";
+				objMicOp[2][1] = "MBR < [MAR]";
+				objMicOp[2][2] = "22,23,24,25,26";
+				objMicOp[2][3] = "";
+
+				objMicOp[3][0] = "T3: ";
+				objMicOp[3][1] = "PC < [MBR]";
+				objMicOp[3][2] = "";
+				objMicOp[3][3] = "";
+				break;
+				case "JG":
+				if(flagSinal == null){
+					Alert_label.setText("CMP NAO FOI EXECUTADO");
+					throw new IllegalArgumentException("CMP NAO FOI EXECUTADO");
+				}
+				if(flagSinal == 0) {
+					assemblyScreen.setJump(true);
+					assemblyScreen.setLineNeedUp(v1);
+				} 
+
+				objMicOp[0][0] = "T1: ";
+				objMicOp[0][1] = "MAR < N !!!JMP N //Número da LINHA, já que utilizamos apenas os números da linha, não temos a TAG com a referência na memória para esse ponto do programa. Utilizaremos essa simplificação para mostrar a atualização de PC.!!!";
+				objMicOp[0][2] = "";
+				objMicOp[0][3] = "";
+
+				objMicOp[1][0] = "";
+				objMicOp[1][1] = "PC++";
+				objMicOp[1][2] = "";
+				objMicOp[1][3] = "";
+
+				objMicOp[2][0] = "T2: ";
+				objMicOp[2][1] = "MBR < [MAR]";
+				objMicOp[2][2] = "22,23,24,25,26";
+				objMicOp[2][3] = "";
+
+				objMicOp[3][0] = "T3: ";
+				objMicOp[3][1] = "PC < [MBR]";
+				objMicOp[3][2] = "";
+				objMicOp[3][3] = "";
+				break;
+				case "JLE":
+				if(flagSinal == null){
+					Alert_label.setText("CMP NAO FOI EXECUTADO");
+					throw new IllegalArgumentException("CMP NAO FOI EXECUTADO");
+				}
+				if((flagSinal == 1) || (flagSinal == 1 && flagZero == 1)) {
+					assemblyScreen.setJump(true);
+					assemblyScreen.setLineNeedUp(v1);
+				};
+
+				objMicOp[0][0] = "T1: ";
+				objMicOp[0][1] = "MAR < N !!!JMP N //Número da LINHA, já que utilizamos apenas os números da linha, não temos a TAG com a referência na memória para esse ponto do programa. Utilizaremos essa simplificação para mostrar a atualização de PC.!!!";
+				objMicOp[0][2] = "";
+				objMicOp[0][3] = "";
+
+				objMicOp[1][0] = "";
+				objMicOp[1][1] = "PC++";
+				objMicOp[1][2] = "";
+				objMicOp[1][3] = "";
+
+				objMicOp[2][0] = "T2: ";
+				objMicOp[2][1] = "MBR < [MAR]";
+				objMicOp[2][2] = "22,23,24,25,26";
+				objMicOp[2][3] = "";
+
+				objMicOp[3][0] = "T3: ";
+				objMicOp[3][1] = "PC < [MBR]";
+				objMicOp[3][2] = "";
+				objMicOp[3][3] = "";
+				break;
+				case "JGE":
+				if(flagZero == null){
+					Alert_label.setText("CMP NAO FOI EXECUTADO");
+					throw new IllegalArgumentException("CMP NAO FOI EXECUTADO");
+				}
+				if((flagSinal == 0) || (flagSinal == 0 && flagZero == 1)){
+					assemblyScreen.setJump(true);
+					assemblyScreen.setLineNeedUp(v1);
+				};
+
+				objMicOp[0][0] = "T1: ";
+				objMicOp[0][1] = "MAR < N !!!JMP N //Número da LINHA, já que utilizamos apenas os números da linha, não temos a TAG com a referência na memória para esse ponto do programa. Utilizaremos essa simplificação para mostrar a atualização de PC.!!!";
+				objMicOp[0][2] = "";
+				objMicOp[0][3] = "";
+
+				objMicOp[1][0] = "";
+				objMicOp[1][1] = "PC++";
+				objMicOp[1][2] = "";
+				objMicOp[1][3] = "";
+
+				objMicOp[2][0] = "T2: ";
+				objMicOp[2][1] = "MBR < [MAR]";
+				objMicOp[2][2] = "22,23,24,25,26";
+				objMicOp[2][3] = "";
+
+				objMicOp[3][0] = "T3: ";
+				objMicOp[3][1] = "PC < [MBR]";
+				objMicOp[3][2] = "";
+				objMicOp[3][3] = "";
+				break;
+				case "MOV":
+				resultado = toHex(v2);
+				if(memoryX1){
+					updateMemoria(tabela, resultado, x1);
+				}else if(registrador1){
+					if (x1.equals("AX")){
+						AX = resultado;
+					}
+					if (x1.equals("BX")){
+						BX = resultado;
+					}
+					if (x1.equals("CX")){
+						CX = resultado;
+					}
+					if (x1.equals("DX")){
+						DX = resultado;
+					}
+				}
 
 				//MOV BX, AX /Registradores
-if (!memoryX1 && !memoryX2 && registrador1 && registrador2){
+				if (!memoryX1 && !memoryX2 && registrador1 && registrador2){
 //					{"IR < [PC]","2,14"}
-//					PC ++ "????"
+//					PC ++
 //					"BX < AX",  "7!, 8!"
-	objMicOp = {{"T1: ", "IR < [PC]", "2,14"},
-	{"", "PC++", "", ""},
-	{"T2: ", "BX < AX", "7!,8!", ""}
-};
-}
+
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
+
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = x1 + " < "+x2;
+					objMicOp[2][2] = x2Saida+ "," +x1Entrada ; 
+					objMicOp[2][3] = "";
+
+				}
 //				MOV [123], AX Registradores + memoryX1
-if (memoryX1 && !memoryX2 && !registrador1 && registrador2){
+				if (memoryX1 && !memoryX2 && !registrador1 && registrador2){
 //					{"IR < [PC]","2,14"}
-//					PC ++ "????"
+//					PC ++
 //					"MAR < IR, "17, 3"
 //					"MBR < AX", "4, 7"
 //					"MBR < [MAR]". "22, 23, 24, 25, 26"
-	objMicOp = {{"T1: ", "IR < [PC]", "2,14"},
-	{"", "PC++", "", ""},
-	{"T2: ", "MAR < IR", "17,3"},
-	{"T3: ", "MBR < AX", "4,7"},
-	{"T4: ", "MBR < [MAR]", "22,23,24,25,26", ""}
-};
-//					
-}
+
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
+
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "MAR < IR";
+					objMicOp[2][2] = "17,3";
+					objMicOp[2][3] = "";
+
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "MBR <" +x2;
+					objMicOp[3][2] = "4,"+ x2Saida;
+					objMicOp[3][3] = "";
+
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = "MBR < [MAR]";
+					objMicOp[4][2] = "22,23,24,25,26";
+					objMicOp[4][3] = "";
+					
+				}
 //				MOV AX, [123] Registradores + memoryX2
-if (!memoryX1 && memoryX2 && registrador1 && !registrador2){
+				if (!memoryX1 && memoryX2 && registrador1 && !registrador2){
 //					{"IR < [PC]","2,14"}
-//					PC ++ "????"
+//					PC ++
 //					MAR < IR
 //					"MBR < [MAR]", "22, 23, 24, 25, 26"
-//					AX < MBR "5, 6"
-	objMicOp = {{"T1: ", "IR < [PC]", "2,14"},
-	{"", "PC++", "", ""},
-	{"T2: ", "MAR < IR", "17,3"},
-	{"T3: ", "MBR < [MAR]", "22,23,24,25,26"},
-	{"T4: ", "AX < MBR", "5,6", ""}
-};
-//					
+//					AX < MBR "5, 6!"
 
-}
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
+
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "MAR < IR";
+					objMicOp[2][2] = "17,3";
+					objMicOp[2][3] = "";
+
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "MBR < [MAR]";
+					objMicOp[3][2] = "22,23,24,25,26";
+					objMicOp[3][3] = "";
+
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = x1 +"< MBR";
+					objMicOp[4][2] = "5," + x1Entrada;
+					objMicOp[4][3] = "";
+					
+				}
 //				MOV AX, 2  /memoryX1
-if (!memoryX1 && !memoryX2 && registrador1 && !registrador2){
+				if (!memoryX1 && !memoryX2 && registrador1 && !registrador2){
 //					{"IR < [PC]","2,14"}
-//					PC ++ "????"
+//					PC ++
 //					AX < "Magia", "Magia, 6"
-	objMicOp = {{"T1: ", "IR < [PC]", "2,14"},
-	{"", "PC++", "", ""},
-	{"T2: ", "AX < MisterM", "6", ""}
-};
-}
+
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
+
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = x1 +"< Magia";
+					objMicOp[2][2] = x1Entrada;
+					objMicOp[2][3] = "";
+				}
 //				MOV [123], 2  /Registradores1
-if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
+				if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
 //					{"IR < [PC]","2,14"}
 //					PC ++
 //					MAR < IR
 //					"MBR < MAGIA", "Magia, 4"
 //					MBR < [MAR], "22, 23, 24, 25, 26"
-	objMicOp = {{"T1: ", "IR < [PC]", "2,14"},
-	{"", "PC++", "", ""},
-	{"T2: ", "MAR < IR", "17,3"},
-	{"T3: ", "MBR < MisterM", "4"},
-	{"T4: ", "MBR < [MAR]", "22,23,24,25,26", ""}
-};
-}	
-break;
-default:
-throw new IllegalArgumentException("Comando Invalido: " + command + " [>] tente ADD AX, 10");
-}
 
-Object [][] objMicOp = {{"T1", "Mar< PC", "2,3"},{"T2", "MBR< [MAR]", "2,3"},{"", "PC++", "5,9"}, {"T3", "IR < MBR", "10,44"}};
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
+
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "MAR < IR";
+					objMicOp[2][2] = "17,3";
+					objMicOp[2][3] = "";
+
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "MBR < Magia";
+					objMicOp[3][2] = "4";
+					objMicOp[3][3] = "";
+
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = "MBR < [MAR]";
+					objMicOp[4][2] = "22,23,24,25,26";
+					objMicOp[4][3] = "";
+				}	
+				break;
+				default:
+				Alert_label.setText("Comando Invalido: " + command + " [>] tente ADD AX, 10");
+				throw new IllegalArgumentException("Comando Invalido: " + command + " [>] tente ADD AX, 10");
+			}
+
+// Object [][] objMicOp = {{"T1", "Mar< PC", "2,3"},{"T2", "MBR< [MAR]", "2,3"},{"", "PC++", "5,9"}, {"T3", "IR < MBR", "10,44"}};
 
 		//Atualizando as microperações.
-		//TODO Change this number. 4
-for (int ii = 0; ii < 4; ii++) {
+
+			for (int ii = 0; ii < 20; ii++) {
 //			String portasAbertas[] = new String [26];
 //			String[] numeros = String.valueOf(objMicOp[ii][2]).split(","); //["2","7","22"]
 //			int ultimoNumero;
@@ -1280,68 +1842,68 @@ for (int ii = 0; ii < 4; ii++) {
 //			Object portasAbertasObj = portasAbertasString;
 //			objMicOp[ii][3] = portasAbertasObj;
 
-	assemblyScreen.microInstrucoes.setValueAt(objMicOp[ii][0], ii, 0);
-	assemblyScreen.microInstrucoes.setValueAt(objMicOp[ii][1], ii, 1);
-	assemblyScreen.microInstrucoes.setValueAt(objMicOp[ii][2], ii, 2);
-	assemblyScreen.microInstrucoes.setValueAt("", ii, 3);
-}
+				assemblyScreen.microInstrucoes.setValueAt(objMicOp[ii][0], ii, 0);
+				assemblyScreen.microInstrucoes.setValueAt(objMicOp[ii][1], ii, 1);
+				assemblyScreen.microInstrucoes.setValueAt(objMicOp[ii][2], ii, 2);
+				assemblyScreen.microInstrucoes.setValueAt("", ii, 3);
+			}
 
-updateRegistradores();
-		//Retorna as portas que ficarao abertas e As memorias que mudarao
-//		updateRegistradores();
+			updateRegistradores();
 
-}
+		}
 
-public String execute(JTable table, JTextPane txtAssembly, JLabel ax_label, JLabel bx_label,JLabel cx_label, JLabel dx_label,JLabel zero_label, JLabel sinal_label, JTable instructions_table){
-	AX = "0"; BX = "0"; CX = "0"; DX = "0";
+		public String execute(JTable table, JTextPane txtAssembly, JLabel ax_label, JLabel bx_label,JLabel cx_label, JLabel dx_label,JLabel zero_label, JLabel sinal_label, JTable instructions_table, JLabel alert_label){
+			AX = "0"; BX = "0"; CX = "0"; DX = "0";
 
-		//Cria a lista ligada ou matriz com o cÃƒÂ³digo.
-	String codigo = txtAssembly.getText();
-	comandos = codigo.split("\\r?\\n");
-	tabela = table;
-	instructionsTable = instructions_table;
+		//Cria a lista ligada ou matriz com o codigo.
+			String codigo = txtAssembly.getText();
+			comandos = codigo.split("\\r?\\n");
+			tabela = table;
+			instructionsTable = instructions_table;
 		//updateBus(openBars, abre );
 
-		//Verifica qual o comando e roda o cÃƒÂ³digo do comando.
-		//Retorna as portas que ficarÃƒÂ£o abertas e 
-		//Muda as memÃƒÂ³rias que mudarÃƒÂ£o
-	
-	AX_label = ax_label; 
-	BX_label = bx_label;
-	CX_label = cx_label;
-	DX_label = dx_label;
-	Sinal_label = sinal_label;
-	Zero_label = zero_label;
-	instructionsTable= instructions_table;
+		//Verifica qual o comando e roda o codigo do comando.
+		//Retorna as portas que ficarao abertas e 
+		//Muda as memÃƒÂ³rias que mudarao
 
-	updateRegistradores();
+			AX_label = ax_label; 
+			BX_label = bx_label;
+			CX_label = cx_label;
+			DX_label = dx_label;
+			Sinal_label = sinal_label;
+			Zero_label = zero_label;
+			Alert_label = alert_label;
+			instructionsTable= instructions_table;
+			Alert_label.setText("");
+			
+			updateRegistradores();
 
 
 		//Rodar comando da primeira linha.
-	executeLine(0);
-	return null;
-}
+			executeLine(0);
+			return null;
+		}
 
-public void updateRegistradores(){
-	AX_label.setText(AX);
-	BX_label.setText(BX);
-	CX_label.setText(CX);
-	DX_label.setText(DX);
-}
+		public void updateRegistradores(){
+			AX_label.setText(AX);
+			BX_label.setText(BX);
+			CX_label.setText(CX);
+			DX_label.setText(DX);
+		}
 
-public void updateInstructions(String text){
-	Instructions_label.setText(text);
-}
+		public void updateInstructions(String text){
+			Instructions_label.setText(text);
+		}
 
 
 	//String to Integer Decimal
-public static Integer toDec(String hex){
-	return Integer.parseInt(hex, 16);
-}
+		public static Integer toDec(String hex){
+			return Integer.parseInt(hex, 16);
+		}
 
 	//Integer to String Hexadecimal
-public static String toHex(Integer dec){
-	return Integer.toHexString(dec);
-}
+		public static String toHex(Integer dec){
+			return Integer.toHexString(dec);
+		}
 
-}
+	}

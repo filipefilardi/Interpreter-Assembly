@@ -22,6 +22,11 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
+import javax.swing.JScrollBar;
+import java.awt.ScrollPane;
+import java.awt.Color;
 
 public class AssemblyScreen extends JFrame {
 
@@ -81,13 +86,12 @@ public class AssemblyScreen extends JFrame {
 //		Object[][] data = {{"000", "33"},{"004", "11"},{"FF8", "3"}};
 
 		
-		//TODO ARRUMAR OQ CAGAMOS
 		Object[][] data = new Object[4088][2];
 		data[0][0] = 0;
 		data[0][1] = 0;
 		int aux = 4;
 		for(int i = 1; i<= data.length-1; i++){
-			data[i][0] = CmdAssembly.toHex(aux);
+			data[i][0] = CmdAssembly.toHex(aux).toUpperCase();
 			data[i][1] = 0;
 			aux += 4;
 		}
@@ -98,8 +102,8 @@ public class AssemblyScreen extends JFrame {
 		contentPane.add(table);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon("/Users/guerra/Dropbox/EACH/OCD/EP2/Interpreter-Assembly/CPU.png"));
-		lblNewLabel.setBounds(240, 170, 260, 260);
+		lblNewLabel.setIcon(new ImageIcon("CPU.png"));
+		lblNewLabel.setBounds(237, 107, 260, 260);
 		contentPane.add(lblNewLabel);
 		
 		
@@ -108,6 +112,7 @@ public class AssemblyScreen extends JFrame {
 		JButton btnParar = new JButton("Parar");
 		JLabel lblExecutandoLinha = new JLabel("Executando Linha:");
 		JLabel linhaSendoExecutada = new JLabel("0");
+		
 		
 		btnExecutar.setBounds(38, 669, 117, 29);
 		contentPane.add(btnExecutar);
@@ -121,10 +126,18 @@ public class AssemblyScreen extends JFrame {
 		lblExecutandoLinha.setBounds(421, 674, 124, 16);
 		contentPane.add(lblExecutandoLinha);
 		
+		JLabel linhaSendoExecutada2 = new JLabel("");
+		linhaSendoExecutada2.setBounds(709, 85, 61, 16);
+		contentPane.add(linhaSendoExecutada2);
+		
 		
 		linhaSendoExecutada.setBounds(539, 674, 90, 16);
 		contentPane.add(linhaSendoExecutada);
-		
+		linhaSendoExecutada.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				linhaSendoExecutada2.setText(linhaSendoExecutada.getText());
+			}
+		});
 		
 		btnParar.setEnabled(false);
 		btnParar.setBounds(174, 669, 117, 29);
@@ -166,7 +179,7 @@ public class AssemblyScreen extends JFrame {
 		dx_label.setBounds(464, 629, 61, 16);
 		contentPane.add(dx_label);
 		
-		JLabel lblNewLabel_1 = new JLabel("Micro Operações: (LInha x):");
+		JLabel lblNewLabel_1 = new JLabel("Micro Operações: (Linha     ):");
 		lblNewLabel_1.setBounds(555, 85, 245, 16);
 		contentPane.add(lblNewLabel_1);
 		
@@ -179,7 +192,7 @@ public class AssemblyScreen extends JFrame {
 
 		
 		microInstrucoes = new JTable(dataInstrucoes, columnNames2);
-		microInstrucoes.setBounds(555, 113, 375, 557);
+		microInstrucoes.setBounds(555, 153, 375, 517);
 		contentPane.add(microInstrucoes);
 		
 		JLabel lblNewLabel_3 = new JLabel("Flags:");
@@ -217,19 +230,44 @@ public class AssemblyScreen extends JFrame {
 		contentPane.add(lblCdigoAssembly);
 		
 		JLabel lblNewLabel_5 = new JLabel("Criado por Filipe Filardi de Jesus, Gabriel Salgado Sina & Rodrigo Guerra. ");
-		lblNewLabel_5.setBounds(773, 683, 466, 16);
+		lblNewLabel_5.setFont(new Font("Lucida Grande", Font.PLAIN, 8));
+		lblNewLabel_5.setBounds(940, 683, 299, 16);
 		contentPane.add(lblNewLabel_5);
 		
 		JLabel lblCpuBarramentosE = new JLabel("CPU, Barramentos e Registradores:");
 		lblCpuBarramentosE.setBounds(218, 81, 245, 16);
 		contentPane.add(lblCpuBarramentosE);
 		
+		JLabel lblNewLabel_6 = new JLabel("Tempo");
+		lblNewLabel_6.setBounds(555, 125, 61, 16);
+		contentPane.add(lblNewLabel_6);
+		
+		JLabel lblMicroOperao = new JLabel("Micro operação:");
+		lblMicroOperao.setBounds(682, 125, 100, 16);
+		contentPane.add(lblMicroOperao);
+		
+		JLabel lblPortasAbertas = new JLabel("Portas Abertas:");
+		lblPortasAbertas.setBounds(810, 125, 109, 16);
+		contentPane.add(lblPortasAbertas);
+		
+		JTextPane txtpnKkkk = new JTextPane();
+		txtpnKkkk.setText("Observação: Em alguns poucos casos o registrador ou porta utilizado dentro de nossa arquitetura(vide imagem à cima), não contemplava, ou não deixava claro as portas ou registradores de algumas micro operações implementadas. Detalhes sobre \"Magia\",\"Spell\" e \"Resto Divisão\" podem ser encontradas no relatório.\n");
+		txtpnKkkk.setBounds(216, 371, 329, 115);
+		contentPane.add(txtpnKkkk);
+		
+		JLabel alert_label = new JLabel("");
+		alert_label.setForeground(Color.RED);
+		alert_label.setBounds(557, 674, 375, 16);
+		contentPane.add(alert_label);
+		
+		
+		
 		CmdAssembly cmdAssembly = new CmdAssembly();
 		cmdAssembly.assembly(this);
 		
 		btnExecutar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				cmdAssembly.execute(table, textAssembly, ax_label, bx_label, cx_label, dx_label, zero_label, sinal_label, microInstrucoes);
+				cmdAssembly.execute(table, textAssembly, ax_label, bx_label, cx_label, dx_label, zero_label, sinal_label, microInstrucoes, alert_label);
 				btnExecutar.setEnabled(false);
 				btnNextLine.setEnabled(true);
 				btnParar.setEnabled(true);
