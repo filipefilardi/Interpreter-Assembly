@@ -211,36 +211,36 @@ public class CmdAssembly {
 
 
  		if (x1.equals("AX")){
- 			x1Entrada = 6;
- 			x1Saida = 7;
+ 			x1Entrada = "6";
+ 			x1Saida = "7";
  		}
  		if (x1.equals("BX")){
- 			x1Entrada = 8;
- 			x1Saida = 9;
+ 			x1Entrada = "8";
+ 			x1Saida = "9";
  		}
  		if (x1.equals("CX")){
- 			x1Entrada = 10;
- 			x1Saida = 11;
+ 			x1Entrada = "10";
+ 			x1Saida = "11";
  		}
  		if (x1.equals("DX")){
- 			x1Entrada = 12;
- 			x1Saida = 13;
+ 			x1Entrada = "12";
+ 			x1Saida = "13";
  		}
  		if (x2.equals("AX")){
- 			x2Entrada = 6;
- 			x2Saida = 7;
+ 			x2Entrada = "6";
+ 			x2Saida = "7";
  		}
  		if (x2.equals("BX")){
- 			x2Entrada = 8;
- 			x2Saida = 9;
+ 			x2Entrada = "8";
+ 			x2Saida = "9";
  		}
  		if (x2.equals("CX")){
- 			x2Entrada = 10;
- 			x2Saida = 11;
+ 			x2Entrada = "10";
+ 			x2Saida = "11";
  		}
  		if (x2.equals("DX")){
- 			x2Entrada = 12;
- 			x2Saida = 13;
+ 			x2Entrada = "12";
+ 			x2Saida = "13";
  		}
 	
 		String resultado;
