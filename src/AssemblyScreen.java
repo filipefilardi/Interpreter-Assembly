@@ -28,8 +28,11 @@ public class AssemblyScreen extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
 	private JLabel linhaSendoExecutada;
+
 	public JTable microInstrucoes;
 	public JLabel ax_label, cx_label, bx_label, dx_label, mbrLabel, ulaLabel, zero_label, sinal_label;
+	boolean jump;
+	int lineNeedUp;
 	
 	/**
 	 * Launch the application.
@@ -236,18 +239,25 @@ public class AssemblyScreen extends JFrame {
 		});
 		
 		
-		btnNextLine.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String linhaS = linhaSendoExecutada.getText();
-				int linha = Integer.parseInt(linhaS);
-				linha++;
-				linhaS = String.valueOf(linha);
-				linhaSendoExecutada.setText(linhaS);
-				cmdAssembly.executeLine(linha);
-			}
-		});
-		
-	
+			btnNextLine.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if(jump == false){
+						String linhaS = linhaSendoExecutada.getText();
+						int linha = Integer.parseInt(linhaS);
+						linha++;
+						linhaS = String.valueOf(linha);
+						linhaSendoExecutada.setText(linhaS);
+						cmdAssembly.executeLine(linha);	
+					} else {
+						String linhaS = linhaSendoExecutada.getText();
+						linhaS = String.valueOf(lineNeedUp);
+						linhaSendoExecutada.setText(linhaS);
+						cmdAssembly.executeLine(lineNeedUp);
+						jump = false;
+					}
+				}
+			});
+
 		btnParar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				btnExecutar.setEnabled(true);
@@ -256,9 +266,17 @@ public class AssemblyScreen extends JFrame {
 				textAssembly.setEnabled(true);
 			}
 		});
-		//Todo: Quanto nao tem mais linhas?
+		//TODO: Quanto nao tem mais linhas?
 		
 		
 		
+	}
+	
+	public void setJump(boolean jump){
+		this.jump = jump;
+	}
+	
+	public void setLineNeedUp(int i){
+		this.lineNeedUp = i;
 	}
 }
