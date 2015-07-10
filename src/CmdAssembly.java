@@ -618,25 +618,25 @@ public class CmdAssembly {
 //					PC ++
 //					"X < BX", "9!, 19"
 //					"BX<AC", "6,21"
-					objMicOp[0][0] = {"T1: "};
-					objMicOp[0][1] = {"IR < [PC]"};
-					objMicOp[0][2] = {"2,14"};
-					objMicOp[0][3] = {""};
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
 					
-					objMicOp[1][0] = {""};
-					objMicOp[1][1] = {"PC++"};
-					objMicOp[1][2] = {""};
-					objMicOp[1][3] = {""};
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
 					
-					objMicOp[2][0] = {"T2: "};
-					objMicOp[2][1] = {"X < BX"};
-					objMicOp[2][2] = {"9!,19"};
-					objMicOp[2][3] = {""};
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "X < BX";
+					objMicOp[2][2] = "9!,19";
+					objMicOp[2][3] = "";
 					
-					objMicOp[3][0] = {"T3: "};
-					objMicOp[3][1] = {"BX < AC"};
-					objMicOp[3][2] = {"6,21"};
-					objMicOp[3][3] = {""};
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "BX < AC";
+					objMicOp[3][2] = "6,21";
+					objMicOp[3][3] = "";
 							
 				}
 //				INC [1234]
@@ -648,40 +648,40 @@ public class CmdAssembly {
 //					X  < MBR. "5,19"
 //					"MBR < AC", "4, 21" // Recebeu a soma
 //					MBR < [MAR], "22, 23, 24, 25, 26"
-					objMicOp[0][0] = {"T1: "};
-					objMicOp[0][1] = {"IR < [PC]"};
-					objMicOp[0][2] = {"2,14"};
-					objMicOp[0][3] = {""};
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
 					
-					objMicOp[1][0] = {""};
-					objMicOp[1][1] = {"PC++"};
-					objMicOp[1][2] = {""};
-					objMicOp[1][3] = {""};
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
 					
-					objMicOp[2][0] = {"T2: "};
-					objMicOp[2][1] = {"MAR < IR"};
-					objMicOp[2][2] = {"3,17"}; 
-					objMicOp[2][3] = {""};
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "MAR < IR";
+					objMicOp[2][2] = "3,17"; 
+					objMicOp[2][3] = "";
 					
-					objMicOp[3][0] = {"T3: "};
-					objMicOp[3][1] = {"MBR < [Mar]"};
-					objMicOp[3][2] = {"22,23,24,25,26"};
-					objMicOp[3][3] = {""};
+					objMicOp[3][0] = "T3: "};
+					objMicOp[3][1] = "MBR < [Mar]";
+					objMicOp[3][2] = "22,23,24,25,26";
+					objMicOp[3][3] = "";
 					
-					objMicOp[4][0] = {"T4: "};
-					objMicOp[4][1] = {"X  < MBR"};
-					objMicOp[4][2] = {"5,19"};
-					objMicOp[4][3] = {""};
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = "X  < MBR";
+					objMicOp[4][2] = "5,19";
+					objMicOp[4][3] = "";
 					
-					objMicOp[5][0] = {"T5: "};
-					objMicOp[5][1] = {"MBR < AC"};
-					objMicOp[5][2] = {"4,21"};
-					objMicOp[5][3] = {""};
+					objMicOp[5][0] = "T5: ";
+					objMicOp[5][1] = "MBR < AC";
+					objMicOp[5][2] = "4,21";
+					objMicOp[5][3] = "";
 					
-					objMicOp[6][0] = {"T6: "};
-					objMicOp[6][1] = {"MBR < [MAR]"};
-					objMicOp[6][2] = {"22,23,24,25,26"};
-					objMicOp[6][3] = {""};
+					objMicOp[6][0] = "T6: ";
+					objMicOp[6][1] = "MBR < [MAR]";
+					objMicOp[6][2] = "22,23,24,25,26";
+					objMicOp[6][3] = "";
 					
 				}
 				
@@ -712,25 +712,25 @@ public class CmdAssembly {
 //					PC ++
 //					"X < BX", "9!, 19"
 //					"BX<AC", "6,21"
-					objMicOp[0][0] = {"T1: "};
-					objMicOp[0][1] = {"IR < [PC]"};
-					objMicOp[0][2] = {"2,14"};
-					objMicOp[0][3] = {""};
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
 					
-					objMicOp[1][0] = {""};
-					objMicOp[1][1] = {"PC++"};
-					objMicOp[1][2] = {""};
-					objMicOp[1][3] = {""};
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = """;
+					objMicOp[1][3] = "";
 					
-					objMicOp[2][0] = {"T2: "};
-					objMicOp[2][1] = {"X < BX"};
-					objMicOp[2][2] = {"9!,19"};
-					objMicOp[2][3] = {""};
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "X < BX";
+					objMicOp[2][2] = "9!,19";
+					objMicOp[2][3] = "";
 					
-					objMicOp[3][0] = {"T3: "};
-					objMicOp[3][1] = {"BX < AC"};
-					objMicOp[3][2] = {"6,21"};
-					objMicOp[3][3] = {""};
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "BX < AC";
+					objMicOp[3][2] = "6,21";
+					objMicOp[3][3] = "";
 				}
 //				INC [1234]
 				if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
@@ -742,40 +742,40 @@ public class CmdAssembly {
 //					"MBR < AC", "4, 21" // Recebeu a soma
 //					MBR < [MAR], "22, 23, 24, 25, 26"
 					
-					objMicOp[0][0] = {"T1: "};
-					objMicOp[0][1] = {"IR < [PC]"};
-					objMicOp[0][2] = {"2,14"};
-					objMicOp[0][3] = {""};
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
 					
-					objMicOp[1][0] = {""};
-					objMicOp[1][1] = {"PC++"};
-					objMicOp[1][2] = {""};
-					objMicOp[1][3] = {""};
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
 					
-					objMicOp[2][0] = {"T2: "};
-					objMicOp[2][1] = {"MAR < IR"};
-					objMicOp[2][2] = {"3,17"}; 
-					objMicOp[2][3] = {""};	
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "MAR < IR";
+					objMicOp[2][2] = "3,17"; 
+					objMicOp[2][3] = "";	
 					
-					objMicOp[3][0] = {"T3: "};
-					objMicOp[3][1] = {"MBR < [Mar]"};
-					objMicOp[3][2] = {"22,23,24,25,26"};
-					objMicOp[3][3] = {""};
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "MBR < [Mar]";
+					objMicOp[3][2] = "22,23,24,25,26";
+					objMicOp[3][3] = "";
 					
-					objMicOp[4][0] = {"T4: "};
-					objMicOp[4][1] = {"X  < MBR"};
-					objMicOp[4][2] = {"5,19"};
-					objMicOp[4][3] = {""};
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = "X  < MBR";
+					objMicOp[4][2] = "5,19";
+					objMicOp[4][3] = "";
 					
-					objMicOp[5][0] = {"T5: "};
-					objMicOp[5][1] = {"MBR < AC"};
-					objMicOp[5][2] = {"4,21"};
-					objMicOp[5][3] = {""};
+					objMicOp[5][0] = "T5: ";
+					objMicOp[5][1] = "MBR < AC";
+					objMicOp[5][2] = "4,21";
+					objMicOp[5][3] = "";
 					
-					objMicOp[6][0] = {"T6: "};
-					objMicOp[6][1] = {"MBR < [MAR]"};
-					objMicOp[6][2] = {"22,23,24,25,26"};
-					objMicOp[6][3] = {""};
+					objMicOp[6][0] = "T6: ";
+					objMicOp[6][1] = "MBR < [MAR]";
+					objMicOp[6][2] = "22,23,24,25,26";
+					objMicOp[6][3] = "";
 				}
 				
 				
