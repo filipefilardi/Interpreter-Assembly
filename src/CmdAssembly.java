@@ -211,36 +211,36 @@ public class CmdAssembly {
 
 
  		if (x1.equals("AX")){
- 			x1Entrada = 6;
- 			x1Saida = 7;
+ 			x1Entrada = "6";
+ 			x1Saida = "7";
  		}
  		if (x1.equals("BX")){
- 			x1Entrada = 8;
- 			x1Saida = 9;
+ 			x1Entrada = "8";
+ 			x1Saida = "9";
  		}
  		if (x1.equals("CX")){
- 			x1Entrada = 10;
- 			x1Saida = 11;
+ 			x1Entrada = "10";
+ 			x1Saida = "11";
  		}
  		if (x1.equals("DX")){
- 			x1Entrada = 12;
- 			x1Saida = 13;
+ 			x1Entrada = "12";
+ 			x1Saida = "13";
  		}
  		if (x2.equals("AX")){
- 			x2Entrada = 6;
- 			x2Saida = 7;
+ 			x2Entrada = "6";
+ 			x2Saida = "7";
  		}
  		if (x2.equals("BX")){
- 			x2Entrada = 8;
- 			x2Saida = 9;
+ 			x2Entrada = "8";
+ 			x2Saida = "9";
  		}
  		if (x2.equals("CX")){
- 			x2Entrada = 10;
- 			x2Saida = 11;
+ 			x2Entrada = "10";
+ 			x2Saida = "11";
  		}
  		if (x2.equals("DX")){
- 			x2Entrada = 12;
- 			x2Saida = 13;
+ 			x2Entrada = "12";
+ 			x2Saida = "13";
  		}
 	
 		String resultado;
@@ -489,12 +489,31 @@ public class CmdAssembly {
 //					"X < MAGIA", "MAGIA, 19"
 //					"ULA < AX", "7, 20"
 //					"AX<AC", "6,21"
-					objMicOp = {{"T1: ", "IR < [PC]", "2,14", ""},
-								{"", "PC++", "", ""},
-								{"T2: ", "X < MAGIA", "19", ""},// MAGIA ??
-								{"T3: ", "ULA < AX", "7,20", ""},
-								{"T4: ", "AX < AC", "6,21", ""}
-								};
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
+					
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+					
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "X < MAGIA";
+					objMicOp[2][2] = "19";
+					objMicOp[2][3] = "";// MAGIA ??
+					
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "ULA < AX";
+					objMicOp[3][2] = "7,20";
+					objMicOp[3][3] = "";
+					
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = "AX < AC";
+					objMicOp[4][2] = "6,21";
+					objMicOp[4][3] = "";
+
 				}
 //				MUL BX
 				if (!memoryX1 && !memoryX2 && registrador1 && !registrador2){
@@ -503,13 +522,31 @@ public class CmdAssembly {
 //					"X < BX", "9!, 19"
 //					"ULA < AX", "7, 20"
 //					"AX<AC", "6,21"
-					objMicOp = {{"T1: ", "IR < [PC]", "2,14", ""},
-								{"", "PC++", "", ""},
-								{"T2: ", "X < BX", "9!,19", ""},
-								{"T3: ", "ULA < AX", "7,20", ""},
-								{"T4: ", "AX < AC", "6,21", ""}
-								};
-				}
+						objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
+					
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+					
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "X < BX";
+					objMicOp[2][2] = "9!,19";
+					objMicOp[2][3] = "";
+					
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "ULA < AX";
+					objMicOp[3][2] = "7,20";
+					objMicOp[3][3] = "";
+							
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = "AX < AC";
+					objMicOp[4][2] = "6,21";
+					objMicOp[4][3] = ""};
+							
 //				MUL [1234]
 				if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
 //					{"IR < [PC]","2,14"}
@@ -519,15 +556,41 @@ public class CmdAssembly {
 //					X  < MBR. "5,19"
 //					"ULA < AX", "7, 20"
 //					"AX<AC", "6,21"
-					objMicOp = {{"T1: ", "IR < [PC]", "2,14", ""},
-								{"", "PC++", "", ""},
-								{"T2: ", "MAR < IR", "3,17", ""},
-								{"T3: ", "MBR < [Mar]", "22,23,24,25,26", ""},
-								{"T4: ", "X  < MBR", "5,19", ""},
-								{"T5: ", "ULA < AX", "7,20", ""},
-								{"T6: ", "AX < AC", "6,21", ""}
-								};
 					
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
+					
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+					
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "MAR < IR";
+					objMicOp[2][2] = "3,17";
+					objMicOp[2][3] = "";
+							
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "MBR < [MAR]";
+					objMicOp[3][2] = "22,23,24,25,26";
+					objMicOp[3][3] = "";
+					
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = "X  < MBR";
+					objMicOp[4][2] = "5,19";
+					objMicOp[4][3] = "";
+					
+					objMicOp[5][0] = "T5: ";
+					objMicOp[5][1] = "ULA < AX";
+					objMicOp[5][2] = "7,20";
+					objMicOp[5][3] = "";
+								
+					objMicOp[6][0] = "T6: ";
+					objMicOp[6][1] = "AX < AC";
+					objMicOp[6][2] = "6,21";
+					objMicOp[6][3] = "";
 				}
 				break;
 			case "DIV":
@@ -539,13 +602,35 @@ public class CmdAssembly {
 //					"ULA < AX", "7, 20"
 //					"AX<AC", "6,21"
 //					+ Resto
-					objMicOp = {{"T1: ", "IR < [PC]", "2,14", ""},
-								{"", "PC++", "", ""},
-								{"T2: ", "X < MAGIA", "19", ""},// MAGIA ??
-								{"T3: ", "ULA < AX", "7,20", ""},
-								{"T4: ", "AX < AC", "6,21", ""},
-								{"T5: ", "DX < restoDivisao", "", ""}
-								};
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
+					
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+					
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "X < MAGIA";
+					objMicOp[2][2] = "19";
+					objMicOp[2][3] = "";// MAGIA ??
+					
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "ULA < AX";
+					objMicOp[3][2] = "7,20";
+					objMicOp[3][3] = "";
+					
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = "AX < AC";
+					objMicOp[4][2] = "6,21";
+					objMicOp[4][3] = "";
+					
+					objMicOp[5][0] = "T5: ";
+					objMicOp[5][1] = "DX < restoDivisao";
+					objMicOp[5][2] = "";
+					objMicOp[5][3] = "";
 				}
 //				DIV BX
 				if (!memoryX1 && !memoryX2 && registrador1 && !registrador2){
@@ -555,13 +640,35 @@ public class CmdAssembly {
 //					"ULA < AX", "7, 20"
 //					"AX<AC", "6,21"
 //					+ Resto
-					objMicOp = {{"T1: ", "IR < [PC]", "2,14", ""},
-								{"", "PC++", "", ""},
-								{"T2: ", "X < BX", "9!,19", ""},
-								{"T3: ", "ULA < AX", "7,20", ""},
-								{"T4: ", "AX < AC", "6,21", ""},
-								{"T5: ", "DX < restoDivisao", "", ""}
-								};
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
+					
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+					
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "X < BX";
+					objMicOp[2][2] = "9!,19";
+					objMicOp[2][3] = "";
+					
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "ULA < AX";
+					objMicOp[3][2] = "7,20";
+					objMicOp[3][3] = "";
+							
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = "AX < AC";
+					objMicOp[4][2] = "6,21";
+					objMicOp[4][3] = ""};
+							
+					objMicOp[5][0] = "";
+					objMicOp[5][1] = "T5: ";
+					objMicOp[5][2] = "DX < restoDivisao";
+					objMicOp[5][3] = "";
 				}
 //				DIV [1234]
 				if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
@@ -573,15 +680,41 @@ public class CmdAssembly {
 //					"ULA < AX", "7, 20"
 //					"AX<AC", "6,21"
 					//+ Resto
-					objMicOp = {{"T1: ", "IR < [PC]", "2,14", ""},
-								{"", "PC++", "", ""},
-								{"T2: ", "MAR < IR", "3,17", ""},
-								{"T3: ", "MBR < [Mar]", "22,23,24,25,26", ""},
-								{"T4: ", "X  < MBR", "5,19", ""},
-								{"T5: ", "ULA < AX", "7,20", ""},
-								{"T6: ", "AX < AC", "6,21", ""}
-								};
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
 					
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+					
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "MAR < IR";
+					objMicOp[2][2] = "3,17";
+					objMicOp[2][3] = "";
+							
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "MBR < [Mar]";
+					objMicOp[3][2] = "22,23,24,25,26";
+					objMicOp[3][3] = "";
+					
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = "X  < MBR";
+					objMicOp[4][2] = "5,19";
+					objMicOp[4][3] = "";
+					
+					objMicOp[5][0] = "T5: ";
+					objMicOp[5][1] = "ULA < AX";
+					objMicOp[5][2] = "7,20";
+					objMicOp[5][3] = "";
+								
+					objMicOp[6][0] = "T6: ";
+					objMicOp[6][1] = "AX < AC";
+					objMicOp[6][2] = "6,21";
+					objMicOp[6][3] = "";
+							
 				}
 				if (v1 == 0) throw new IllegalArgumentException("Nao pode divir por zero");
 				else {
@@ -618,11 +751,26 @@ public class CmdAssembly {
 //					PC ++
 //					"X < BX", "9!, 19"
 //					"BX<AC", "6,21"
-					objMicOp = {{"T1: ", "IR < [PC]", "2,14", ""},
-								{"", "PC++", "", ""},
-								{"T2: ", "X < BX", "9!,19", ""},
-								{"T3: ", "BX < AC", "6,21", ""}
-								};
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
+					
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+					
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "X < BX";
+					objMicOp[2][2] = "9!,19";
+					objMicOp[2][3] = "";
+					
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "BX < AC";
+					objMicOp[3][2] = "6,21";
+					objMicOp[3][3] = "";
+							
 				}
 //				INC [1234]
 				if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
@@ -633,15 +781,42 @@ public class CmdAssembly {
 //					X  < MBR. "5,19"
 //					"MBR < AC", "4, 21" // Recebeu a soma
 //					MBR < [MAR], "22, 23, 24, 25, 26"
-					objMicOp = {{"T1: ", "IR < [PC]", "2,14", ""},
-								{"", "PC++", "", ""},
-								{"T2: ", "MAR < IR", "3,17", ""},
-								{"T3: ", "MBR < [Mar]", "22,23,24,25,26", ""},
-								{"T4: ", "X  < MBR", "5,19", ""},
-								{"T5: ", "MBR < AC", "4,21", ""},
-								{"T6: ", "MBR < [MAR]", "22,23,24,25,26", ""}
-								};
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
 					
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+					
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "MAR < IR";
+					objMicOp[2][2] = "3,17"; 
+					objMicOp[2][3] = "";
+					
+					objMicOp[3][0] = "T3: "};
+					objMicOp[3][1] = "MBR < [Mar]";
+					objMicOp[3][2] = "22,23,24,25,26";
+					objMicOp[3][3] = "";
+					
+
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = "X  < MBR";
+					objMicOp[4][2] = "5,19";
+					objMicOp[4][3] = "";
+					
+					objMicOp[5][0] = "T5: ";
+					objMicOp[5][1] = "MBR < AC";
+					objMicOp[5][2] = "4,21";
+					objMicOp[5][3] = "";
+					
+					objMicOp[6][0] = "T6: ";
+					objMicOp[6][1] = "MBR < [MAR]";
+					objMicOp[6][2] = "22,23,24,25,26";
+					objMicOp[6][3] = "";
+
 				}
 				
 				break;
@@ -671,6 +846,27 @@ public class CmdAssembly {
 //					PC ++
 //					"X < BX", "9!, 19"
 //					"BX<AC", "6,21"
+
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
+					
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+					
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "X < BX";
+					objMicOp[2][2] = "9!,19";
+					objMicOp[2][3] = "";
+					
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "BX < AC";
+					objMicOp[3][2] = "6,21";
+					objMicOp[3][3] = "";
+
 				}
 //				INC [1234]
 				if (memoryX1 && !memoryX2 && !registrador1 && !registrador2){
@@ -681,6 +877,44 @@ public class CmdAssembly {
 //					X  < MBR. "5,19"
 //					"MBR < AC", "4, 21" // Recebeu a soma
 //					MBR < [MAR], "22, 23, 24, 25, 26"
+
+
+					
+					objMicOp[0][0] = "T1: ";
+					objMicOp[0][1] = "IR < [PC]";
+					objMicOp[0][2] = "2,14";
+					objMicOp[0][3] = "";
+					
+					objMicOp[1][0] = "";
+					objMicOp[1][1] = "PC++";
+					objMicOp[1][2] = "";
+					objMicOp[1][3] = "";
+					
+					objMicOp[2][0] = "T2: ";
+					objMicOp[2][1] = "MAR < IR";
+					objMicOp[2][2] = "3,17"; 
+					objMicOp[2][3] = "";	
+					
+					objMicOp[3][0] = "T3: ";
+					objMicOp[3][1] = "MBR < [Mar]";
+					objMicOp[3][2] = "22,23,24,25,26";
+					objMicOp[3][3] = "";
+					
+					objMicOp[4][0] = "T4: ";
+					objMicOp[4][1] = "X  < MBR";
+					objMicOp[4][2] = "5,19";
+					objMicOp[4][3] = "";
+					
+					objMicOp[5][0] = "T5: ";
+					objMicOp[5][1] = "MBR < AC";
+					objMicOp[5][2] = "4,21";
+					objMicOp[5][3] = "";
+					
+					objMicOp[6][0] = "T6: ";
+					objMicOp[6][1] = "MBR < [MAR]";
+					objMicOp[6][2] = "22,23,24,25,26";
+					objMicOp[6][3] = "";
+
 				}
 				
 				
