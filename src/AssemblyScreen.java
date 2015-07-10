@@ -28,8 +28,8 @@ public class AssemblyScreen extends JFrame {
 	private JPanel contentPane;
 	private JTable table;
 	private JLabel linhaSendoExecutada;
-	private JTable microInstrucoes;
-	public JLabel ax_label, cx_label, bx_label, dx_label, marLabel, mbrLabel, ulaLabel;
+	public JTable microInstrucoes;
+	public JLabel ax_label, cx_label, bx_label, dx_label, mbrLabel, ulaLabel, zero_label, sinal_label;
 	
 	/**
 	 * Launch the application.
@@ -56,7 +56,7 @@ public class AssemblyScreen extends JFrame {
 	 */
 	public AssemblyScreen() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1563, 723);
+		setBounds(100, 100, 1241, 723);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -66,11 +66,11 @@ public class AssemblyScreen extends JFrame {
 		lineNumber.setText("0:\n1:\n2:\n3:\n4:\n5:\n6:\n7:\n8:\n9:\n10:\n11:\n12:\n13:\n14:\n15:\n16:\n17:\n18:\n19:\n20:\n21:\n22:\n23:\n24:\n25:\n26:\n27:\n28:\n29:\n30:\n31:\n32:\n33:\n34:\n35:\n36:\n37:\n38:\n39:\n40:");
 		lineNumber.setWrapStyleWord(true);
 		lineNumber.setRows(32);
-		lineNumber.setBounds(6, 6, 20, 665);
+		lineNumber.setBounds(6, 107, 20, 628);
 		contentPane.add(lineNumber);
 		
 		JTextPane textAssembly = new JTextPane();
-		textAssembly.setBounds(33, 6, 171, 658);
+		textAssembly.setBounds(33, 107, 171, 557);
 		contentPane.add(textAssembly);
 		
 		String[] columnNames = {"Memoria", "Dados"};
@@ -91,12 +91,12 @@ public class AssemblyScreen extends JFrame {
 		
 		
 		table = new JTable(data, columnNames);
-		table.setBounds(942, 139, 289, 531);
+		table.setBounds(942, 113, 289, 557);
 		contentPane.add(table);
 		
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon("/Users/guerra/Dropbox/EACH/OCD/EP2/Interpreter-Assembly/CPU.png"));
-		lblNewLabel.setBounds(218, 389, 260, 260);
+		lblNewLabel.setBounds(240, 170, 260, 260);
 		contentPane.add(lblNewLabel);
 		
 		
@@ -132,161 +132,106 @@ public class AssemblyScreen extends JFrame {
 		contentPane.add(panel);
 		
 		JLabel lblAx = new JLabel("AX:");
-		lblAx.setBounds(224, 222, 34, 16);
+		lblAx.setBounds(237, 608, 34, 16);
 		contentPane.add(lblAx);
 		
 		JLabel ax_label = new JLabel("");
-		ax_label.setBounds(252, 222, 61, 16);
+		ax_label.setBounds(265, 608, 61, 16);
 		contentPane.add(ax_label);
 		
 		JLabel lblCx = new JLabel("CX:");
-		lblCx.setBounds(424, 224, 34, 16);
+		lblCx.setBounds(437, 610, 31, 16);
 		contentPane.add(lblCx);
 		
 		JLabel cx_label = new JLabel("");
-		cx_label.setBounds(451, 224, 61, 16);
+		cx_label.setBounds(464, 608, 61, 16);
 		contentPane.add(cx_label);
 		
 		JLabel lblBx = new JLabel("BX:");
-		lblBx.setBounds(224, 243, 34, 16);
+		lblBx.setBounds(237, 629, 34, 16);
 		contentPane.add(lblBx);
 		
 		JLabel bx_label = new JLabel("");
-		bx_label.setBounds(251, 243, 61, 16);
+		bx_label.setBounds(264, 629, 61, 16);
 		contentPane.add(bx_label);
 		
 		JLabel lblDx = new JLabel("DX:");
-		lblDx.setBounds(421, 243, 34, 16);
+		lblDx.setBounds(434, 629, 34, 16);
 		contentPane.add(lblDx);
 		
 		JLabel dx_label = new JLabel("");
-		dx_label.setBounds(448, 243, 61, 16);
+		dx_label.setBounds(464, 629, 61, 16);
 		contentPane.add(dx_label);
 		
-		JLabel lblNewLabel_1 = new JLabel("Micro Operações: (LInha x)");
-		lblNewLabel_1.setBounds(555, 101, 245, 16);
+		JLabel lblNewLabel_1 = new JLabel("Micro Operações: (LInha x):");
+		lblNewLabel_1.setBounds(555, 85, 245, 16);
 		contentPane.add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_2 = new JLabel("Memoria (hex):");
-		lblNewLabel_2.setBounds(943, 111, 185, 16);
+		lblNewLabel_2.setBounds(942, 85, 185, 16);
 		contentPane.add(lblNewLabel_2);
 		
-		String[] columnNames2 = {"T1:", "Dados:", "Portas:"};		
-		Object[][] dataInstrucoes = {{"T1", "Mar< PC", "???"},{"T2", "MBR< [MAR]", "???"},{"", "PC++", "???"}, {"T3", "IR < MBR", "???"}};
+		String[] columnNames2 = {"T1:", "Dados:", "Portas Abertas:", "Representacao Portas "};		
+		Object[][] dataInstrucoes = {{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""},{"","","",""}};
 
 		
 		microInstrucoes = new JTable(dataInstrucoes, columnNames2);
-		microInstrucoes.setBounds(555, 139, 375, 466);
+		microInstrucoes.setBounds(555, 113, 375, 557);
 		contentPane.add(microInstrucoes);
 		
 		JLabel lblNewLabel_3 = new JLabel("Flags:");
-		lblNewLabel_3.setBounds(216, 29, 61, 16);
+		lblNewLabel_3.setBounds(229, 515, 61, 16);
 		contentPane.add(lblNewLabel_3);
 		
 		JLabel lblNewLabel_4 = new JLabel("Sinal:");
-		lblNewLabel_4.setBounds(226, 57, 61, 16);
+		lblNewLabel_4.setBounds(239, 543, 34, 16);
 		contentPane.add(lblNewLabel_4);
 		
-		JLabel sinalLabel = new JLabel("");
-		sinalLabel.setBounds(602, 101, 61, 16);
-		contentPane.add(sinalLabel);
-		
-		JLabel zeroLabel = new JLabel("");
-		zeroLabel.setBounds(793, 101, 61, 16);
-		contentPane.add(zeroLabel);
-		
 		JLabel lblZero = new JLabel("Zero:");
-		lblZero.setBounds(417, 57, 61, 16);
+		lblZero.setBounds(430, 543, 34, 16);
 		contentPane.add(lblZero);
 		
 		JLabel lblRegistradores = new JLabel("Registradores:");
-		lblRegistradores.setBounds(216, 94, 109, 16);
+		lblRegistradores.setBounds(229, 580, 109, 16);
 		contentPane.add(lblRegistradores);
 		
-		JLabel lblMar = new JLabel("MAR:");
-		lblMar.setBounds(226, 122, 34, 16);
-		contentPane.add(lblMar);
+		JLabel sinal_label = new JLabel("");
+		sinal_label.setBounds(277, 543, 61, 16);
+		contentPane.add(sinal_label);
 		
-		marLabel = new JLabel("");
-		marLabel.setBounds(254, 122, 61, 16);
-		contentPane.add(marLabel);
+		JLabel zero_label = new JLabel("");
+		zero_label.setBounds(464, 543, 61, 16);
+		contentPane.add(zero_label);
 		
-		JLabel lblMbr = new JLabel("MBR:");
-		lblMbr.setBounds(417, 122, 34, 16);
-		contentPane.add(lblMbr);
+		JLabel lblEpOcd = new JLabel("EP2 | OCD Interpreter Assembly");
+		lblEpOcd.setFont(new Font("Lucida Grande", Font.PLAIN, 37));
+		lblEpOcd.setHorizontalAlignment(SwingConstants.CENTER);
+		lblEpOcd.setBounds(6, 11, 1225, 62);
+		contentPane.add(lblEpOcd);
 		
-		JLabel mbrLabel = new JLabel("");
-		mbrLabel.setBounds(445, 122, 61, 16);
-		contentPane.add(mbrLabel);
+		JLabel lblCdigoAssembly = new JLabel("Código Assembly:");
+		lblCdigoAssembly.setBounds(6, 85, 149, 16);
+		contentPane.add(lblCdigoAssembly);
 		
-		JLabel lblPc = new JLabel("PC:");
-		lblPc.setBounds(226, 150, 34, 16);
-		contentPane.add(lblPc);
+		JLabel lblNewLabel_5 = new JLabel("Criado por Filipe Filardi de Jesus, Gabriel Salgado Sina & Rodrigo Guerra. ");
+		lblNewLabel_5.setBounds(773, 683, 466, 16);
+		contentPane.add(lblNewLabel_5);
 		
-		JLabel pcLabel = new JLabel("");
-		pcLabel.setBounds(254, 150, 61, 16);
-		contentPane.add(pcLabel);
-		
-		JLabel lblIr = new JLabel("IR:");
-		lblIr.setBounds(417, 150, 34, 16);
-		contentPane.add(lblIr);
-		
-		JLabel irLabel = new JLabel("");
-		irLabel.setBounds(445, 150, 61, 16);
-		contentPane.add(irLabel);
-		
-		JLabel ulaLabel = new JLabel("");
-		ulaLabel.setBounds(254, 177, 61, 16);
-		contentPane.add(ulaLabel);
-		
-		JLabel lblUc = new JLabel("UC:");
-		lblUc.setBounds(226, 205, 34, 16);
-		contentPane.add(lblUc);
-		
-		JLabel lblUla = new JLabel("ULA:");
-		lblUla.setBounds(226, 177, 34, 16);
-		contentPane.add(lblUla);
-		
-		JLabel ucLabel = new JLabel("");
-		ucLabel.setBounds(254, 205, 61, 16);
-		contentPane.add(ucLabel);
-		
-		JLabel lblAc = new JLabel("AC:");
-		lblAc.setBounds(417, 177, 34, 16);
-		contentPane.add(lblAc);
-		
-		JLabel acLabel = new JLabel("");
-		acLabel.setBounds(445, 177, 61, 16);
-		contentPane.add(acLabel);
-		
-		JLabel uxLabel = new JLabel("");
-		uxLabel.setBounds(445, 205, 61, 16);
-		contentPane.add(uxLabel);
-		
-		JLabel lblUx = new JLabel("UX:");
-		lblUx.setBounds(417, 205, 34, 16);
-		contentPane.add(lblUx);
-		
-		JButton btnNewButton = new JButton("Proximo Tempo");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton.setBounds(771, 617, 158, 29);
-		contentPane.add(btnNewButton);
+		JLabel lblCpuBarramentosE = new JLabel("CPU, Barramentos e Registradores:");
+		lblCpuBarramentosE.setBounds(218, 81, 245, 16);
+		contentPane.add(lblCpuBarramentosE);
 		
 		CmdAssembly cmdAssembly = new CmdAssembly();
 		cmdAssembly.assembly(this);
 		
 		btnExecutar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				cmdAssembly.execute(table, textAssembly, ax_label, bx_label, cx_label, dx_label, microInstrucoes);
+				cmdAssembly.execute(table, textAssembly, ax_label, bx_label, cx_label, dx_label, zero_label, sinal_label, microInstrucoes);
 				btnExecutar.setEnabled(false);
 				btnNextLine.setEnabled(true);
 				btnParar.setEnabled(true);
 				textAssembly.setEnabled(false);
 				linhaSendoExecutada.setText("0");
-				
 			}
 		});
 		

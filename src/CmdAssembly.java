@@ -20,7 +20,7 @@ public class CmdAssembly {
 	private JTable instructionsTable;
 	public AssemblyScreen assemblyScreen;
 	
-	private JLabel AX_label, BX_label, CX_label, DX_label,Instructions_label;
+	private JLabel AX_label, BX_label, CX_label, DX_label,Instructions_label, Sinal_label, Zero_label;
 	String AX, BX, CX, DX; // inicializacao dos contadores
 	
 	
@@ -519,11 +519,24 @@ public class CmdAssembly {
 				int result = v1 - v2;
 				
 				//Determinacao das flags
-				if(result == 0) flagZero = 1;
-				else flagZero = 0;
+				if(result == 0) {
+					flagZero = 1;
+					Zero_label.setText("1");
+				}else{
+					flagZero = 0;
+					Zero_label.setText("0");
+				}
 				
-				if(result < 0) flagSinal = 1;
-				if(result >= 0) flagSinal = 0;
+				if(result < 0){
+					flagSinal = 1;
+					Sinal_label.setText("1");
+				} 
+				if(result >= 0){
+					flagSinal = 0;
+					Sinal_label.setText("0");
+				} 
+				
+				
 				
 
 				//CMP BX, AX /Registradores
@@ -678,17 +691,47 @@ public class CmdAssembly {
 				throw new IllegalArgumentException("Comando Invalido: " + command + " [>] tente ADD AX, 10");
 		}
 		
+		Object [][] objMicOp = {{"T1", "Mar< PC", "2,3"},{"T2", "MBR< [MAR]", "2,3"},{"", "PC++", "5,9"}, {"T3", "IR < MBR", "10,44"}};
+		
+		//Atualizando as microperações.
+		//TODO Change this number. 4
+		for (int ii = 0; ii < 4; ii++) {
+//			String portasAbertas[] = new String [26];
+//			String[] numeros = String.valueOf(objMicOp[ii][2]).split(","); //["2","7","22"]
+//			int ultimoNumero;
+//			ultimoNumero = 1;
+//			
+//			for (int jjj = 0; jjj < portasAbertas.length; jjj++) {
+//				portasAbertas[jjj] = "0";
+//			}
+//			
+//			for (int jjj = 0; jjj < numeros.length; jjj++) {
+//				portasAbertas[Integer.parseInt(numeros[jjj])-1] = "1";
+//			}
+//			
+//			String portasAbertasString = "";
+//			for (int jjj = 0; jjj < portasAbertas.length; jjj++) {
+//				portasAbertasString += portasAbertas[jjj];
+//			}
+//			
+//			Object portasAbertasObj = portasAbertasString;
+//			objMicOp[ii][3] = portasAbertasObj;
+			
+			assemblyScreen.microInstrucoes.setValueAt(objMicOp[ii][0], ii, 0);
+			assemblyScreen.microInstrucoes.setValueAt(objMicOp[ii][1], ii, 1);
+			assemblyScreen.microInstrucoes.setValueAt(objMicOp[ii][2], ii, 2);
+			assemblyScreen.microInstrucoes.setValueAt("", ii, 3);
+		}
+		
 		 updateRegistradores();
 		//Retorna as portas que ficarao abertas e As memorias que mudarao
 //		updateRegistradores();
 		
 	}
 	
-	public String execute(JTable table, JTextPane txtAssembly, JLabel ax_label, JLabel bx_label,JLabel cx_label, JLabel dx_label, JTable instructions_table){
+	public String execute(JTable table, JTextPane txtAssembly, JLabel ax_label, JLabel bx_label,JLabel cx_label, JLabel dx_label,JLabel zero_label, JLabel sinal_label, JTable instructions_table){
 		AX = "0"; BX = "0"; CX = "0"; DX = "0";
 		
-		//Limpar comandos
-		assemblyScreen.marLabel.setText("Mudou!");
 		//Cria a lista ligada ou matriz com o cÃƒÂ³digo.
 		String codigo = txtAssembly.getText();
 		comandos = codigo.split("\\r?\\n");
@@ -704,6 +747,8 @@ public class CmdAssembly {
 		BX_label = bx_label;
 		CX_label = cx_label;
 		DX_label = dx_label;
+		Sinal_label = sinal_label;
+		Zero_label = zero_label;
 		instructionsTable= instructions_table;
 		
 		 updateRegistradores();
