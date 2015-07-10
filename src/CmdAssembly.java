@@ -579,11 +579,8 @@ public class CmdAssembly {
 
 				break;
 			case "JMP":
-				executeLine(v1);
-				//Subustituir no Label linhaSendoExecutada
-				AssemblyScreen as = new AssemblyScreen ();
-				as.atualizaLinha(v1);
-				
+				assemblyScreen.setJump(true);
+				assemblyScreen.setLineNeedUp(v1);
 //				JMP N //Número da LINHA, já que utilizamos apenas os números da linha, não temos a TAG com a referência na memória para esse ponto do programa. Utilizaremos essa simplificação para mostrar a atualização de PC.
 //				MAR < N
 //				"MBR < [Mar]", "22, 23, 24, 25, 26"}
@@ -591,27 +588,45 @@ public class CmdAssembly {
 				break;
 			case "JZ":
 				if(flagZero == null) throw new IllegalArgumentException("CMP NAO FOI EXECUTADO");
-				if(flagZero == 1) executeLine(v1);
+				if(flagZero == 1) {
+					assemblyScreen.setJump(true);
+					assemblyScreen.setLineNeedUp(v1);
+				};
 				break;
 			case "JNZ":
 				if(flagZero == null) throw new IllegalArgumentException("CMP NAO FOI EXECUTADO");
-				if(flagZero == 0) executeLine(v1);
+				if(flagZero == 0){
+					assemblyScreen.setJump(true);
+					assemblyScreen.setLineNeedUp(v1);
+				}
 				break;
 			case "JL":
 				if(flagSinal == null) throw new IllegalArgumentException("CMP NAO FOI EXECUTADO");
-				if(flagSinal == 1) executeLine(v1); 
+				if(flagSinal == 1) {
+					assemblyScreen.setJump(true);
+					assemblyScreen.setLineNeedUp(v1);
+				} 
 				break;
 			case "JG":
 				if(flagSinal == null) throw new IllegalArgumentException("CMP NAO FOI EXECUTADO");
-				if(flagSinal == 0) executeLine(v1); 
+				if(flagSinal == 0) {
+					assemblyScreen.setJump(true);
+					assemblyScreen.setLineNeedUp(v1);
+				} 
 				break;
 			case "JLE":
 				if(flagSinal == null) throw new IllegalArgumentException("CMP NAO FOI EXECUTADO");
-				if((flagSinal == 1) || (flagSinal == 1 && flagZero == 1)) executeLine(v1);
+				if((flagSinal == 1) || (flagSinal == 1 && flagZero == 1)) {
+					assemblyScreen.setJump(true);
+					assemblyScreen.setLineNeedUp(v1);
+				};
 				break;
 			case "JGE":
 				if(flagZero == null) throw new IllegalArgumentException("CMP NAO FOI EXECUTADO");
-				if((flagSinal == 0) || (flagSinal == 0 && flagZero == 1)) executeLine(v1);
+				if((flagSinal == 0) || (flagSinal == 0 && flagZero == 1)){
+					assemblyScreen.setJump(true);
+					assemblyScreen.setLineNeedUp(v1);
+				};
 				break;
 			case "MOV":
 				resultado = toHex(v2);
